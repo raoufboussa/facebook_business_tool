@@ -1,1 +1,0 @@
-<a href="{% provider_login_url "google" process="connect" %}">Connect a Google account</a><br><br>
