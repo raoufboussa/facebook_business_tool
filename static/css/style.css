@@ -315,12 +315,6 @@ ul.company-social li {
   padding: 12px 0px 0px 0px;
   margin: 0px; }
 
-.testimonials-banner {
-  width: 100%;
-  min-height: 370px;
-  background: #ddd url(../img/testimonials/cover/desk.jpg) no-repeat;
-  background-size: cover; }
-
 address {
     margin-bottom: 20px;
     font-style: normal;
