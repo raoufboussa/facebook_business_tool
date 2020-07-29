@@ -1,0 +1,36 @@
+{% load static %}
+<link rel="stylesheet" href="/assets/bootstrap/bootstrap.min.css">
+
+
+
+<div class="list-group">
+  {% for name, id, token in namesAndIDs %}
+      :
+       <a href="/chooseAccount?pageId={{id}}"  class="list-group-item list-group-item-action links"> {{ name }}</a>
+
+  {% endfor %}
+
+</div>
+
+Renseingez votre Adaccount :
+<form>
+  <input type="text" id="act_id" class="form-control" placeholder="act_107517.." />
+  <button id="adAccountSubmit" class="btn btn-primary"> Validez!</button>
+</form>
+
+<script>
+  (function() {
+
+   let btn = 	document.querySelector("#adAccountSubmit");
+   btn.onclick= (e)=> {
+     e.preventDefault()
+     links = document.querySelectorAll(".links")
+     links.forEach(function(link) {
+       let currentHref = link.getAttribute("href") ;
+       link.setAttribute("href",  currentHref +"&adActId=" +document.querySelector("#act_id").value);
+      });
+
+   }
+
+})()
+</script>

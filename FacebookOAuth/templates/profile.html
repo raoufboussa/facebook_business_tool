@@ -1,0 +1,160 @@
+{% load static %}
+{% load my_filters %}
+{% load account socialaccount  %}<br/><br/><br/>
+<!-- <h1>Posts :  {{posts}}  -->
+<meta name="google-signin-client_id" content="965061152118-th1f0ci707eo7f5q792dt62qb4b54bsn.apps.googleusercontent.com">
+
+<!-- <script src="https://apis.google.com/js/platform.js" async defer></script>
+<div class="g-signin2" data-onsuccess="onSignIn"></div> <br><br> -->
+
+
+
+<br><br>
+<a href="{% provider_login_url "google" process="connect" %}">Connect a Google account</a><br><br>
+<a href="{% provider_login_url "facebook" process="connect" %}">Connect a facebook account</a><br><br>
+<br><br>
+<button id="query"> query with javascript SDK</button>
+
+
+<h4>
+Profil Connection : <br><br>
+{{profilConnection}}
+<br><br>
+</h4>
+
+<h4>
+Profil Fields : <br><br>
+{{profilFields }}
+<br><br>
+</h4>
+
+<h4>
+
+page Connection : <br><br>
+{{pageConnection}}
+<br><br>
+</h4>
+
+<h4>
+  Page Info:
+  <br><br>
+{{pageInfo}}
+<br><br>
+</h4>
+
+<h4>
+Campaigns:
+  <br><br>
+{{compaignNames}}
+<br><br>
+</h4>
+
+<h4>
+  Some Campaign Insights:
+  <br><br>
+{{someCampaignInsights}}
+<br><br>
+</h4>
+
+
+
+<form action="/profile/" method="post">
+  {% csrf_token %}
+{{ form.as_p }}
+<input type="submit" value="Submit" />
+</form>
+
+<!-- message : {{message}} -->
+
+
+
+
+<!--
+ {{likes}}
+{% for post in posts.data %}
+<li>{{ post.story  }} f</li>
+{% endfor %}</h1><br/><br/><br/>
+TOKEN :  {{token}} <br/>
+<a href="{% provider_login_url "facebook" process="connect" %}">Connect a Twitter account</a>
+{% user_display user %}
+
+{{user.username}}
+
+
+email : {{user.email}} <br/>
+ pass :  {{user.password}} <br/>
+ date : {{user.date_joined}} <br/>
+email  : {{user.email}}  <br/>
+ lastname : {{user.last_name}} <br/>
+
+{{user.socialaccount_set.all.0.get_avatar_url}} <br/> rff
+ {% for couleur in user.socialaccount %}
+<li>{{ couleur }}</li>
+{% endfor %}
+
+<br/>
+
+  ===================>  this the request data : {{data}} -->
+
+<br/>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script
+  src="https://code.jquery.com/jquery-3.3.1.min.js"
+  integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+  crossorigin="anonymous"></script>
+<script>
+function onSignIn(googleUser) {
+  var profile = googleUser.getBasicProfile();
+  console.log('ID: ' + profile.getId()); // Do not send to your backend! Use an ID token instead.
+  console.log('Name: ' + profile.getName());
+  console.log('Image URL: ' + profile.getImageUrl());
+  console.log('Email: ' + profile.getEmail()); // This is null if the 'email' scope is not present.
+}
+  window.fbAsyncInit = function() {
+$("#query").on('click',  e =>  FB.api('/me/likes', function(response) {
+  alert('Good to see you, ' + JSON.stringify(response) + '.');
+}))
+
+    FB.init({
+      appId            : '217964325484293',
+      autoLogAppEvents : true,
+      xfbml            : true,
+      version          : 'v3.0'
+    });
+
+
+FB.login(function(response) {
+    if (response.authResponse) {
+     console.log('Welcome!  Fetching your information.... ');
+     FB.api('/me', function(response) {
+       console.log('Good to see you, ' + response.name + '.');
+     });
+    } else {
+     alert('User cancelled login or did not fully authorize.');
+    }
+});
+
+  };
+
+  (function(d, s, id){
+     var js, fjs = d.getElementsByTagName(s)[0];
+     if (d.getElementById(id)) {return;}
+     js = d.createElement(s); js.id = id;
+     js.src = "https://connect.facebook.net/en_US/sdk.js";
+     fjs.parentNode.insertBefore(js, fjs);
+   }(document, 'script', 'facebook-jssdk'));
+</script>

@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+
+{% block styles %}
+    <style>
+        .card-img-top {
+            width: 100%;
+            height: 13vw;
+            object-fit: cover;
+        }
+    </style>
+{% endblock %}
+{% block content %}
+{% include "navbar.html" %}
+{% include "sidebar.html" %}
+<div class="wrapper">
+    <div class="content-wrapper">
+        <!-- Content Header (Page header) -->
+        <div class="content-header">
+          <div class="container-fluid">
+                <div class="panel-body">
+                    <h2 class="title text-center bg-success" > Your Pages </h2>
+                    <div class="row">
+                        {% for page in pages %}
+                                <div class="col-lg-3">
+                                    <div class="card">
+                                        <div class="card-header bg-info">
+                                            <h3 class="card-title">
+                                                {{ page.name }}
+                                            </h3>
+                                        </div><!-- /.card-header -->
+                                        <div class="card-body">
+                                                <img class="card-img-top" src="{{page.cover.source}}" alt="Card image cap">
+                                        </div>
+                                        <!-- /.card-body -->
+                                        <div class="card-footer">
+                                            <a class="btn btn-success float-left" href="/home?pageId={{page.page_id}}&access_token={{page.access_token}}">Consulter la Page</a>
+                                        </div>
+                                        <!-- /.card-footer -->
+                                    </div>
+                                    <!-- /.card -->
+                                </div>
+                        {% endfor %}
+                    </div>
+                    <h2 class="title text-center bg-success"> Your Ad Accounts </h2>
+                    <div class="row">
+                        {% for adaccount in adaccounts %}
+                                <div class="col-lg-3">
+                                    <div class="card">
+                                        <div class="card-header bg-info">
+                                            <h3 class="card-title">
+                                                {{ adaccount.name }}
+                                            </h3>
+                                        </div><!-- /.card-header -->
+                                        <div class="card-body">
+                                        </div>
+                                        <!-- /.card-body -->
+                                        <div class="card-footer">
+                                            <a class="btn btn-success float-left" href="/home?adActId={{adaccount.adaccount_id}}">Consulter Ad Account</a>
+                                        </div>
+                                        <!-- /.card-footer -->
+                                    </div>
+                                    <!-- /.card -->
+                                </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+         </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}

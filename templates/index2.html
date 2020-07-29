@@ -1,0 +1,282 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block styles %}
+  <link rel="stylesheet" href={% static 'plugins/datatables-bs4/css/dataTables.bootstrap4.css' %}>
+      <style>
+          .content-wrapper {
+            -webkit-transition: min-height 0.2s ease-in-out;
+            -o-transition: min-height 0.2s ease-in-out;
+            transition: min-height 0.2s ease-in-out;
+        }
+        {% comment %} .main-modal {
+          display:none;
+        } {% endcomment %}
+      </style>
+{% endblock %}
+
+{% block content %}
+{% include "navbar.html" %}
+{% include "sidebar.html" %}
+{% comment %} <script>document.body.className = "hold-transition sidebar-mini layout-fixed layout-navbar-fixed layout-footer-fixed";</script> {% endcomment %}
+
+<div class="wrapper">
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <div class="content-header">
+      <div class="container-fluid">
+        <div class="row mb-2">
+          <div class="col-sm-6">
+            <h1 class="m-0 text-dark">{{adaccount_objects.name}}</h1>
+          </div><!-- /.col -->
+          <div class="col-sm-6">
+            <ol class="breadcrumb float-sm-right">
+              <li class="breadcrumb-item"><a href="/home/">Home</a></li>
+              <li class="breadcrumb-item active">Adaccount</li>
+            </ol>
+          </div><!-- /.col -->
+        </div><!-- /.row -->
+      </div><!-- /.container-fluid -->
+    </div>
+    <!-- /.content-header -->
+
+    <!-- Main content -->
+    <section class="content">
+      <div class="container-fluid">
+
+        <div class="row">
+          <div class="col-md-12">
+            <div class="card">
+              <div class="card-header">
+                <h5 class="card-title"> {{adaccount_objects.name}} Insights</h5>
+                <div class="card-tools">
+                  <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                    <i class="fas fa-minus"></i>
+                  </button>
+                  <button type="button" class="btn btn-tool" data-card-widget="remove">
+                    <i class="fas fa-times"></i>
+                  </button>
+                </div>
+              </div>
+              <!-- /.card-header -->
+              <div class="card-body">
+                <div class="row">
+                  <div class = "col-6">
+                     <div class="card">
+                      <div class="card-header bg-info">
+                        <h3 class="card-title">ACTIONS INSIGHTS OF LAST MONTH </h3>
+
+                        <div class="card-tools">
+                          <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-minus"></i>
+                          </button>
+                          <button type="button" class="btn btn-tool" data-card-widget="remove"><i class="fas fa-times"></i></button>
+                        </div>
+                      </div>
+                      <div class="card-body">
+                      <h6>Actions:</h6>
+                        <ul class="list-group">
+                          {% for element in adaccount_objects.insights.actions.all%}
+                            <li class="list-group-item">{{element.action_type}} : {{element.value}}</li>
+                          {% endfor %}
+                        </ul>
+        
+                      </div>
+                      <!-- /.card-body -->
+                    </div>
+                  </div>
+
+                  <div class = "col-6">
+                     <div class="card">
+                      <div class="card-header bg-info">
+                        <h3 class="card-title">OTHER INSIGHTS </h3>
+                        <div class="card-tools">
+                          <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-minus"></i>
+                          </button>
+                          <button type="button" class="btn btn-tool" data-card-widget="remove"><i class="fas fa-times"></i></button>
+                        </div>
+                      </div>
+                      <div class="card-body">
+                        {% if adaccount_objects.insights.cost_per_unique_action_type.all %}
+                          <h6>Cost per action type:</h6>
+                            <ul class="list-group">
+                              {% for element in adaccount_objects.insights.cost_per_unique_action_type.all%}
+                                <li class="list-group-item">{{element.action_type}} : {{element.value}} €</li>
+                              {% endfor %}
+                            </ul>
+                        {% endif %}
+                        {% if adaccount_objects.insights.outbound_clicks_ctr.all %}
+                          <h6>Outbound clicks ctr:</h6>
+                          <ul class="list-group">
+                            {% for element in adaccount_objects.insights.outbound_clicks_ctr.all%}
+                              <li class="list-group-item">{{element.action_type}} : {{element.value}}</li>
+                            {% endfor %}
+                          </ul>
+                      {% endif %}
+                        {% if adaccount_objects.insights.cost_per_outbound_click.all %}
+                        <h6>Cost per outbound click:</h6>
+                          <ul class="list-group">
+                            {% for element in adaccount_objects.insights.cost_per_outbound_click.all%}
+                              <li class="list-group-item">{{element.action_type}} : {{element.value}} €</li>
+                            {% endfor %}
+                          </ul>
+                      {% endif %}
+                        {% if adaccount_objects.insights.cost_per_thruplay.all %}
+                       <h6>Cost per thruplay:</h6>
+                        <ul class="list-group">
+                          {% for element in adaccount_objects.insights.cost_per_thruplay.all%}
+                            <li class="list-group-item">{{element.action_type}} : {{element.value}} €</li>
+                          {% endfor %}
+                        </ul>
+                      {% endif %}    
+                      </div>
+                      <!-- /.card-body -->
+                    </div>
+                  </div>
+                </div>
+                <!-- /.row -->
+              </div>
+              <!-- ./card-body -->
+                {% if adaccount_objects.insights %}
+                  <div class="card-footer">
+                    <div class="row">
+                      <div class="col-sm-3 col-6">
+                        <div class="description-block border-right">
+                          <h5 class="description-header">DZD {{adaccount_objects.insights.cost_per_inline_post_engagement}}</h5>
+                          <span class="description-text">COST PER INLINE POST ENGAGEMENT</span>
+                        </div>
+                        <!-- /.description-block -->
+                      </div>
+                      <!-- /.col -->
+                      <div class="col-sm-3 col-6">
+                        <div class="description-block border-right">
+                          <h5 class="description-header">DZD {{adaccount_objects.insights.cost_per_unique_click}}</h5>
+                          <span class="description-text">COST PER UNIQUE CLICK</span>
+                        </div>
+                        <!-- /.description-block -->
+                      </div>
+                      <!-- /.col -->
+                      <div class="col-sm-3 col-6">
+                        <div class="description-block border-right">
+                          <h5 class="description-header">DZD {{adaccount_objects.insights.cost_per_unique_inline_link_click}}</h5>
+                          <span class="description-text">COST PER UNIQUE INLINE LINK CLICK</span>
+                        </div>
+                        <!-- /.description-block -->
+                      </div>
+                      <!-- /.col -->
+                      <div class="col-sm-3 col-6">
+                        <div class="description-block">
+                          <h5 class="description-header">DZD {{adaccount_objects.insights.cost_per_inline_link_click}}</h5>
+                          <span class="description-text">COST PER INLINE LINK CLICK</span>
+                        </div>
+                        <!-- /.description-block -->
+                      </div>
+                    </div>
+                    <!-- /.row -->
+                  </div>
+                  <!-- /.card-footer -->
+                {% endif %}
+            </div>
+            <!-- /.card -->
+          </div>
+          <!-- /.col -->
+        </div>
+
+
+        <!-- Info boxes -->
+        <div class="row">
+            <div class="col-lg-3 col-6">
+              <!-- small box -->
+              <div class="small-box bg-info">
+                <div class="inner">
+                  <h3>{{adaccount_objects.insights.objective}}</h3>
+                  <p>ACCOUNT OBJECTIVE</p>
+                </div>
+                <div class="icon">
+
+                </div>
+              </div>
+            </div>
+            <!-- ./col -->
+            <div class="col-lg-3 col-6">
+              <!-- small box -->
+              <div class="small-box bg-success">
+                <div class="inner">
+                  <h3>{{adaccount_objects.amount_spent}} DZD</h3>
+                  <p>AMOUNT SPENT </p>
+                </div>
+                <div class="icon">
+                  
+                </div>
+              </div>
+            </div>
+            <!-- ./col -->
+            <div class="col-lg-3 col-6">
+              <!-- small box -->
+              <div class="small-box bg-warning">
+                <div class="inner">
+                  <h3>{{adaccount_objects.balance }} DZD</h3>
+                  <p>BALANCE</p>
+                </div>
+                <div class="icon">
+                 
+                </div>
+              </div>
+            </div>
+            <!-- ./col -->
+            <div class="col-lg-3 col-6">
+              <!-- small box -->
+              <div class="small-box bg-danger">
+                <div class="inner">
+                  <h3>{{start_date}}</h3>
+
+                  <p>DATE_START</p>
+                </div>
+                <div class="icon">
+                  
+                </div>
+              </div>
+            </div>
+            <!-- ./col -->
+          </div>
+          <!-- /.row -->
+      </div>
+      <!--/. container-fluid -->
+      {% include "Campaigns_table.html" %}
+    </section>
+    <!-- /.content -->
+
+  </div>
+  <!-- /.content-wrapper -->
+
+  <!-- Control Sidebar -->
+  <aside class="control-sidebar control-sidebar-dark">
+    <!-- Control sidebar content goes here -->
+  </aside>
+  <!-- /.control-sidebar -->
+  <!-- Main Footer -->
+</div>
+{% block javascript %}
+<!-- AdminLTE App -->
+<script src={% static 'plugins/datatables/jquery.dataTables.js' %}></script>
+<script src={% static 'plugins/datatables-bs4/js/dataTables.bootstrap4.js' %}></script>
+<script src={% static 'dist/js/pages/dashboard2.js' %}></script>
+<script>
+  $(function () {
+    $('canvas').css("height","200px");
+    {% comment %} $('canvas').css("max-width","100%"); {% endcomment %}
+    $("#example1").DataTable();
+    $('.content-wrapper').css('min-height','1000');
+  });
+
+  $(function () {
+    $("#close-modal").click(function () {
+    $('.main-modal').hide();
+  })
+});
+
+</script>
+{% endblock  %}
+
+
+{% endblock content %}

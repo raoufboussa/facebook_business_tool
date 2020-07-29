@@ -1,0 +1,98 @@
+{% load static %}
+<!-- Main Sidebar Container -->
+      <aside class="main-sidebar sidebar-dark-primary elevation-4">
+        <!-- Brand Logo -->
+        <a href="#" class="brand-link">
+          <img src='/media/img/3s_logo.png' alt="3S Solutions Logo" class="brand-image img-circle elevation-3"
+              style="opacity: .8">
+          <span class="brand-text font-weight-light">Solution Tool</span>
+        </a>
+
+        <!-- Sidebar -->
+        <div class="sidebar">
+          <!-- Sidebar user panel (optional) -->
+          {% if request.user.is_authenticated %}
+            <div class="user-panel mt-3 pb-3 mb-3 d-flex">
+            {% if  utilisateur.avatar %}
+                <div class="image">
+                  <img src="{{utilisateur.avatar.url}}" class="img-circle elevation-2" alt="User Image">
+                </div>
+                <div class="info">   
+                    <a href="#" class="d-block"><p>Welcome, {{ utilisateur.user.username }} !</p></a>
+                </div>
+            {% else %}
+                  <div class="info"> 
+                    <p>
+                      <a href="/home/upload_pic?pageId={{page_objects.page_id}}" class="d-block"><i class="far fa-image"> upload img </i><p> Welcome, {{ utilisateur.user.username }} !</a>
+                    </p>
+                  </div>    
+            {% endif %}
+                
+            </div>
+          {% endif %}
+          <!-- Sidebar Menu -->
+          <nav class="mt-2">
+            <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+              <!-- Add icons to the links using the .nav-icon class
+                  with font-awesome or any other icon font library -->
+              <li class="nav-item has-treeview menu-open">
+                <a href="#" class="nav-link {% if "/accounts/login/" == request.path %} active{% endif %}">
+                  <i class="nav-icon fas fa-tachometer-alt"></i>
+                  <p>
+                    Dashboards
+                    <i class="right fas fa-angle-left"></i>
+                  </p>
+                </a>
+                <ul class="nav nav-treeview">
+                  <li class="nav-item">
+                    <a href={% url 'facebook_auth:page' %} class="nav-link {% if "/home/page" == request.path %} active{% endif %}">
+                      <i class="far fa-circle nav-icon"></i>
+                      <p>Pages</p>
+                    </a>
+                  </li>
+                  <li class="nav-item">
+                    <a href={% url 'facebook_auth:adaccount' %} class="nav-link {% if "/home/adaccount" == request.path %} active{% endif %}">
+                      <i class="far fa-circle nav-icon"></i>
+                      <p>Adaccounts</p>
+                    </a>
+                  </li>
+                </ul>
+              </li>
+              <li class="nav-item has-treeview menu-open">
+                <a href="{% url 'facebook_auth:experience' %} " class="nav-link {% if "/home/experience" == request.path %} active{% endif %}">
+                  <i class="nav-icon fas fa-table"></i>
+                  <p>Campaign Experience</p>
+                </a>
+              </li>
+              {% if user.is_superuser %}   
+              <li class="nav-item has-treeview menu-open">
+              <a href="{% url 'facebook_auth:synchronous' %} " class="nav-link {% if "/home/synchronous" == request.path %} active{% endif %}">
+                <i class="fas fa-sync-alt"></i>
+                <p>Synchronous Data</p>
+              </a>
+              </li>
+              {% endif %}
+              <li class="nav-item has-treeview menu-open">
+              <a href="/prepareReport" class="nav-link {% if "/prepareReport" == request.path %} active{% endif %}">
+                <i class="fas fa-file"></i>
+                <p>Get report for Client</p>
+              </a>
+              </li>
+              <li class="nav-item has-treeview menu-open">
+              <a href="{% url 'facebook_auth:export' %} " class="nav-link {% if "/home/export" == request.path %} active{% endif %}">
+                <i class="fas fa-file-export"></i>
+                <p>Export Data to CSV File</p>
+              </a>
+              </li>
+              <li class="nav-item has-treeview menu-open">
+              <a href="{% url 'facebook_auth:about_tool' %} " class="nav-link {% if "/home/about_tool" == request.path %} active{% endif %}">
+                <i class="fas fa-info-circle"></i>
+                <p>How it works?</p>
+              </a>
+              </li>
+            </ul>
+          </nav>
+          <!-- /.sidebar-menu -->
+        </div>
+        <!-- /.sidebar -->
+      </aside>

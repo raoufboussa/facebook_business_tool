@@ -1,0 +1,187 @@
+<div class="row">
+  <div class="col-12">
+    <div class="card">
+      <div class="card-header">
+        <h3 class="card-title">Campaigns insights of {{adaccount_objects.name}} Adaccount</h3>
+      </div>
+      <!-- /.card-header -->
+      <div class="card-body">
+        <table id="example1" class="table table-bordered table-striped">
+          <thead>
+          <tr>
+            <th>Ads Name</th>
+            <th>Objective</th>
+            <th>Status</th>
+            <th>Start time</th>
+            <th>Stop time</th>
+            <th>Age range</th>
+            <th>details</th>
+          </tr>
+          {% comment %} <a href="/home/adaccount/campaign_details?ad_Id={{ads.ad_id}}&account_Id={{ads.account_id}}" >detail</a> {% endcomment %}
+          </thead>
+          <tbody>
+          {% for ads, campaign in adsets %}
+          <tr>
+              <td>{{ads.name}}</td>
+              <td>{{campaign.objective}}</td>
+              <td>{{ads.status}}</td>
+              <td>{{campaign.start_time}}</td>
+              <td>{{campaign.stop_time}}</td>
+              <td>{{ads.targeting.age_min}}-{{ads.targeting.age_max}}</td>      
+              <td><a href="#" data-target="#my_modal" data-toggle="modal" class="identifyingClass" data-id="{{ads.ad_id}}">detail</a></td>
+          </tr>
+          {% endfor %}
+          </tbody>
+          <tfoot>
+          <tr>
+            <th>Ads Name</th>
+            <th>Objective</th>
+            <th>Status</th>
+            <th>Start time</th>
+            <th>Stop time</th>
+            <th>Age range</th>
+            <th>details</th>
+          </tr>
+          </tfoot>
+        </table>
+      </div>
+      <!-- /.card-body -->
+    </div>
+    <!-- /.card -->
+  </div>
+  <!-- /.col -->
+</div>
+<!-- /.row -->
+<div class="main-modal">
+  <div class="modal fade d-example-modal-lg" id="my_modal" tabindex="-1" role="dialog" aria-labelledby="my_modalLabel">
+    <div class="modal-dialog modal-lg" role="dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title" id="myModalLabel">Ads Detail</h4>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        </div>
+          <div class="modal-body">
+            <div class="container-fluid">
+              <div class="row">
+                <!-- /.col-md-6 -->
+                <div class="col-lg">
+                  <div class="card">
+                    <div class="card-header border-0">
+                      <div class="d-flex justify-content-between">
+                        <h3 class="card-title">CPP and CPM of the Ads</h3>
+                      </div>
+                    </div>
+                    <div class="card-body">
+                      <div class="d-flex">
+                        <p class="ml-auto d-flex flex-column text-right">
+                          <span class="text-success" id="pourcentageA">
+                            <i class="fas fa-arrow-up"></i> 
+                          </span>
+                          <span class="text-muted">Since The Debut Of The Ads</span>
+                        </p>
+                      </div>
+                      <!-- /.d-flex -->
+
+                      <div class="position-relative mb-4">
+                        <canvas id="visitors-chart" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas>
+                      </div>
+
+                      <div class="d-flex flex-row justify-content-end">
+                        <span class="mr-2">
+                          <i class="fas fa-square text-primary"></i> CPP
+                        </span>
+
+                        <span>
+                          <i class="fas fa-square text-gray"></i> CPM
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+            </div>
+              <div class="row">
+                <div class="col-lg">
+                <div class="card">
+                  <div class="card-header border-0">
+                  <div class="d-flex justify-content-between">
+                    <h3 class="card-title">Reach And Impressions</h3>
+                  </div>
+                  </div>
+                  <div class="card-body">
+                  <div class="d-flex">
+                    <p class="ml-auto d-flex flex-column text-right">
+                    <span class="text-success" id = "pourcentageB">
+                      <i class="fas fa-arrow-up"></i> 
+                    </span>
+                    <span class="text-muted">Since The Debut Of The Ads</span>
+                    </p>
+                  </div>
+                  <!-- /.d-flex -->
+
+                  <div class="position-relative mb-4">
+                    <canvas id="impressions-reach" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas>
+                  </div>
+
+                  <div class="d-flex flex-row justify-content-end">
+                    <span class="mr-2">
+                    <i class="fas fa-square text-primary"></i> Impressions
+                    </span>
+
+                    <span>
+                    <i class="fas fa-square text-gray"></i> Reach
+                    </span>
+                  </div>
+                  </div>
+                </div>
+                <!-- /.card -->
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-lg">
+                  <div class="card">
+                    <div class="card-header border-0">
+                    <div class="d-flex justify-content-between">
+                      <h3 class="card-title">Cpc of the Ad</h3>
+                    </div>
+                    </div>
+                    <div class="card-body">
+                    <!-- /.d-flex -->
+
+                    <div class="position-relative mb-4">
+                      <canvas id="cpc-chart" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas>
+                    </div>
+
+                    </div>
+                  </div>
+                  <!-- /.card -->
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-lg">
+                <div class="card bg-gradient-info">
+                  <div class="card-header border-0">
+                  <div class="d-flex justify-content-between">
+                    <h3 class="card-title">Ctr of the Ad</h3>
+                  </div>
+                  </div>
+                  <div class="card-body">
+                  <!-- /.d-flex -->
+
+                  <div class="position-relative mb-4">
+                    <canvas id="ctr-chart" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas>
+                  </div>
+
+                  </div>
+                </div>
+                <!-- /.card -->
+                </div>
+              </div>
+            </div>
+            <div class="modal-footer">
+                <button id="close-modal" type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+  </div>
+</div>
+</div>

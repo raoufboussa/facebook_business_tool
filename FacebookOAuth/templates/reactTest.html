@@ -1,0 +1,16 @@
+{% load static %}
+<!-- {{props}} -->
+
+
+<link href="{% static 'react/static/css/main.7bda2c40.css' %}" rel="stylesheet">
+
+<div id="root">
+        <!-- Content of this tag will get replaced by mounted React.Component -->
+      React Component will be here! But you must be authenticated my friend!
+    </div>
+<script>
+       window.props = {{props | safe}};  // make sure to escape your props to prevent XSS! See here for the source for the json filter: https://gist.github.com/pirate/c18bfe4fd96008ffa0aef25001a2e88f
+       window.react_mount = document.getElementById('root');
+</script>
+
+<script type="text/javascript" src="{% static 'react/static/js/main.4a033f1d.js' %}"></script>

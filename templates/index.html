@@ -1,0 +1,558 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block styles %}
+<link href="https://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css" rel="stylesheet"/>
+<style>
+          .content-wrapper {
+            -webkit-transition: min-height 0.2s ease-in-out;
+            -o-transition: min-height 0.2s ease-in-out;
+            transition: min-height 0.2s ease-in-out;
+        }
+        {% comment %} .main-modal {
+          display:none;
+        } {% endcomment %}
+      </style>
+{% endblock %}
+
+{% block content %}
+  {% include "navbar.html" %}
+  {% include "sidebar.html" %}
+  <div class="wrapper">
+
+      <!-- Content Wrapper. Contains page content -->
+      <div class="content-wrapper">
+        <!-- Content Header (Page header) -->
+        <div class="content-header">
+          <div class="container-fluid">
+            <div class="row mb-2">
+              <div class="col-lg-6">
+                <div class="card ">
+                  <div class="card-header bg-info">
+                      <h1 class="card-title">
+                        <i class="fab fa-facebook mr-2"></i>
+                        {{page_objects.name}}
+                      </h1>
+                    </div>
+                    <div class="card-body">
+                      <img class="card-img-top" src="{{cover_page.source}}" alt="Card image cap">
+                      <p >{{page_objects.about}}</p>  
+                    </div><!-- /.card-body -->
+                    <a href="http://{{page_objects.website}}" target="_blank" class="btn btn-primary">Visiter Notre Site</a>
+                </div>
+              </div>  
+              <div class="col-lg-6">
+                <div class="card ">
+                  <div class="card-header bg-info">
+                      <h1 class="card-title">
+                        <i class="fas fa-info-circle"></i>
+                        Page Info
+                      </h1>
+                    </div>
+                    <div class="card-body">
+                      <ul class="list-group list-group-flush">
+                        <li class="list-group-item"> Page Category: <br> 
+                          <p class="card-text">{{page_objects.category}}</p>
+                        </li>
+                        <li class="list-group-item"> Offer eligible: <br> 
+                          <p class="card-text">{{page_objects.offer_eligible}}</p>
+                        </li>
+                        <li class="list-group-item"> Supports instant articles: <br> 
+                          <p class="card-text">{{page_objects.supports_instant_articles}}</p>
+                        </li>
+                        <li class="list-group-item"> Verification status: <br> 
+                          <p class="card-text">{{page_objects.verification_status}}</p>
+                        </li>
+                        <li class="list-group-item"> Owned Page: <br> 
+                          <p class="card-text">{{page_objects.is_owned}}</p>
+                        </li>
+                      </ul>
+                    </div><!-- /.card-body -->
+                </div>
+              </div>  
+            </div><!-- /.row -->
+
+          </div><!-- /.container-fluid -->
+        </div>
+        <!-- /.content-header -->
+
+        <!-- Main content -->
+        <section class="content">
+          <div class="container-fluid">
+             <!-- Info boxes -->
+            <div class="row">
+              <div class="col-12 col-sm-6 col-md-3">
+                <div class="info-box">
+                  <span class="info-box-icon bg-info elevation-1"><i class="fas fa-microphone"></i></span>
+
+                  <div class="info-box-content">
+                    <span class="info-box-text">Talking about page</span>
+                    <span class="info-box-number">
+                      {{page_objects.talking_about_count}}
+                    </span>
+                  </div>
+                  <!-- /.info-box-content -->
+                </div>
+                <!-- /.info-box -->
+              </div>
+              <!-- /.col -->
+              <div class="col-12 col-sm-6 col-md-3">
+                <div class="info-box mb-3">
+                  <span class="info-box-icon bg-success elevation-1"><i class="fas fa-thumbs-up"></i></span>
+
+                  <div class="info-box-content">
+                    <span class="info-box-text">Likes</span>
+                    <span class="info-box-number">{{page_objects.fan_count}}</span>
+                  </div>
+                  <!-- /.info-box-content -->
+                </div>
+                <!-- /.info-box -->
+              </div>
+              <!-- /.col -->
+
+              <!-- fix for small devices only -->
+              <div class="clearfix hidden-md-up"></div>
+
+              <div class="col-12 col-sm-6 col-md-3">
+                <div class="info-box mb-3">
+                  <span class="info-box-icon bg-danger elevation-1"><i class="fas fa-bell"></i></span>
+
+                  <div class="info-box-content">
+                    <span class="info-box-text">Unread Notification</span>
+                    <span class="info-box-number">{{page_objects.unread_notif_count}}</span>
+                  </div>
+                  <!-- /.info-box-content -->
+                </div>
+                <!-- /.info-box -->
+              </div>
+              <!-- /.col -->
+              <div class="col-12 col-sm-6 col-md-3">
+                <div class="info-box mb-3">
+                  <span class="info-box-icon bg-warning elevation-1"><i class="fas fa-phone"></i></span>
+
+                  <div class="info-box-content">
+                    <span class="info-box-text">Phone Number</span>
+                    <span class="info-box-number">{{page_objects.phone}}</span>
+                  </div>
+                  <!-- /.info-box-content -->
+                </div>
+                <!-- /.info-box -->
+              </div>
+            <!-- /.col -->
+          </div>
+          <!-- /.row -->
+          <div class="row">
+            <div class="col-md-12">
+              <div class="card">
+                <div class="card-header bg-info">
+                  <h5 class="card-title">Monthly Recap Report</h5>
+
+                  <div class="card-tools">
+                    <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                      <i class="fas fa-minus"></i>
+                    </button>
+                    <button type="button" class="btn btn-tool" data-card-widget="remove">
+                      <i class="fas fa-times"></i>
+                    </button>
+                  </div>
+                </div>
+                <!-- /.card-header -->
+                <div class="card-body">
+                  <div class="row">
+                    <div class="col-md-12">
+                      <div class="form-group">
+                        <div class="row">
+                          <div class="col-12">
+                            <label>Choose a metric:</label> 
+                            <select class="form-control" id="mySelect_metric">
+                              {% for metric in metrics %}
+                                <option >{{metric.queryName}}</option>
+                              {% endfor %}
+                            </select>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="form-group">
+                          <div class="row">
+                            <div class="col-6">
+                              <label>start_date:</label> 
+                              <input class="form-control" type="text" id="start_date_metric"  />
+                            </div>
+                            <div class="col-6">
+                              <label>end_date:</label>
+                              <input class="form-control" type="text" id="end_date_metric" />
+                            </div>
+                          </div>
+                      </div>
+                      <div class="chart">
+                        <!-- Sales Chart Canvas -->
+                        <canvas id="metricChart-1" height="180" style="height: 180px;"></canvas>
+                      </div>
+                      <!-- /.chart-responsive -->
+                    </div>
+                      {% comment %} <!-- /.col -->
+                      <div class="col-md-4">
+                        <p class="text-center">
+                          <strong>Goal Completion</strong>
+                        </p>
+
+                        <div class="progress-group">
+                          Add New Fans
+                          <span class="float-right"><b>160</b>/200</span>
+                          <div class="progress progress-sm">
+                            <div class="progress-bar bg-primary" style="width: 80%"></div>
+                          </div>
+                        </div>
+                        <!-- /.progress-group -->
+
+                        <div class="progress-group">
+                          Add Visitors page
+                          <span class="float-right"><b>310</b>/400</span>
+                          <div class="progress progress-sm">
+                            <div class="progress-bar bg-danger" style="width: 75%"></div>
+                          </div>
+                        </div>
+
+                        <!-- /.progress-group -->
+                        <div class="progress-group">
+                          <span class="progress-text">Visit Premium Page</span>
+                          <span class="float-right"><b>480</b>/800</span>
+                          <div class="progress progress-sm">
+                            <div class="progress-bar bg-success" style="width: 60%"></div>
+                          </div>
+                        </div>
+
+                        <!-- /.progress-group -->
+                        <div class="progress-group">
+                          Send Inquiries
+                          <span class="float-right"><b>250</b>/500</span>
+                          <div class="progress progress-sm">
+                            <div class="progress-bar bg-warning" style="width: 50%"></div>
+                          </div>
+                        </div>
+                        <!-- /.progress-group -->
+                      </div>
+                      <!-- /.col --> {% endcomment %}
+                  </div>
+                  <!-- /.row -->
+                </div>
+                <!-- ./card-body -->
+                <div class="card-footer">
+                 
+                </div>
+                <!-- /.card-footer -->
+              </div>
+              <!-- /.card -->
+            </div>
+            <!-- /.col -->
+          </div>
+            <!-- Small boxes (Stat box) -->
+            
+            <!-- Main row -->
+            <div class="row">
+              <!-- Left col -->
+              <section class="col-lg-6 connectedSortable">
+                <!-- Custom tabs (Charts with tabs)-->
+                <div class="card">
+                  <div class="card-header bg-info">
+                    <h3 class="card-title">
+                      <i class="fas fa-chart-pie mr-1"></i>
+                      Fan de la page par wilaya
+                    </h3>
+                   
+                  </div><!-- /.card-header -->
+                  <div class="card-body">
+                    <div class="form-group">
+                        <div class="row">
+                          <div class="col-12">
+                            <label>Choose a state:</label> 
+                            <select class="form-control" id="mySelect">
+                              <option>Alger</option>
+                            </select>
+                          </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="row">
+                          <div class="col-6">
+                            <label>start_date:</label> 
+                            <input class="form-control" type="text" id="start_date_city"  />
+                          </div>
+                          <div class="col-6">
+                            <label>end_date:</label>
+                            <input class="form-control" type="text" id="end_date_city" />
+                          </div>
+                        </div>
+                    </div>
+                    <div class="tab-content p-0">
+                      <!-- Morris chart - Sales -->
+                      <div class="chart tab-pane active" id="revenue-chart"
+                          style="position: relative; height: 300px;">
+                          <canvas id="revenue-chart-canvas" height="300" style="height: 300px;"></canvas>                         
+                      </div>
+                    </div>
+                  </div><!-- /.card-body -->
+                </div>
+                <!-- /.card -->
+
+                <!-- solid sales graph -->
+                <div class="card bg-gradient-info">
+                  <div class="card-header border-0 bg-info">
+                    <h3 class="card-title">
+                      <i class="fas fa-th mr-1"></i>
+                      Page Fans
+                    </h3>
+                    <div class="card-tools">
+                      <button type="button" class="btn bg-info btn-sm" data-card-widget="collapse">
+                        <i class="fas fa-minus"></i>
+                      </button>
+                      <button type="button" class="btn bg-info btn-sm" data-card-widget="remove">
+                        <i class="fas fa-times"></i>
+                      </button>
+                    </div>
+                  </div>
+                  <div class="card-body">
+                      <div class="form-group">
+                        <div class="row">
+                          <div class="col-6">
+                            <label>start_date:</label> 
+                            <input class="form-control" type="text" id="start_date"  />
+                          </div>
+                          <div class="col-6">
+                            <label>end_date:</label>
+                            <input class="form-control" type="text" id="end_date" />
+                          </div>
+                        </div>
+                      </div>
+                    <br>
+                    <div>
+                        <canvas class="chart" id="line-chart-1" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas>
+                    </div>
+                  </div>
+                </div>
+                <!-- /.card -->
+                <!-- AREA CHART -->
+                <div class="card card-primary">
+                  <div class="card-header bg-info">
+                    <h3 class="card-title">Daily Logged-in vs Logout Views Count Per Page</h3>
+                    <div class="card-tools">
+                      <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-minus"></i>
+                      </button>
+                      <button type="button" class="btn btn-tool" data-card-widget="remove"><i class="fas fa-times"></i></button>
+                    </div>
+                  </div>
+                  <div class="card-body">
+                    <div class="form-group">
+                      <div class="row">
+                        <div class="col-6">
+                          <label>start_date:</label> 
+                          <input class="form-control" type="text" id="Area_chart_start_date"  />
+                        </div>
+                        <div class="col-6">
+                          <label>end_date:</label>
+                          <input class="form-control" type="text" id="Area_chart_end_date" />
+                        </div>
+                      </div>
+                    </div>
+                    <div class="chart">
+                      <canvas id="areaChart-1" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas>
+                    </div>
+                  </div>
+                  <!-- /.card-body -->
+                  <div class="card-footer">
+                        
+                  </div>
+                </div>
+                <!-- /.card -->
+              </section>
+              <!-- /.Left col -->
+              <!-- right col (We are only adding the ID to make the widgets sortable)-->
+              <section class="col-lg-6 connectedSortable">
+                <!-- Line chart -->
+                <div class="card">
+                    <div class="card-header bg-info">
+                      <h3 class="card-title">Impressions and Post Impressions</h3>
+                      <div class="card-tools">
+                        <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-minus"></i>
+                        </button>
+                        <button type="button" class="btn btn-tool" data-card-widget="remove"><i class="fas fa-times"></i></button>
+                      </div>
+                    </div>
+                    <div class="card-body">
+                      <div class="form-group">
+                        <div class="row">
+                          <div class="col-6">
+                            <label>start_date:</label> 
+                            <input class="form-control" type="text" id="line_chart_start_date"  />
+                          </div>
+                          <div class="col-6">
+                            <label>end_date:</label>
+                            <input class="form-control" type="text" id="line_chart_end_date" />
+                          </div>
+                        </div>
+                      </div>
+                      <!-- /.d-flex -->
+
+                      <div class="position-relative mb-4">
+                        <canvas id="visitors-chart" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas>
+                      </div>
+
+                      <div class="d-flex flex-row justify-content-end">
+                        <span class="mr-2">
+                          <i class="fas fa-square text-primary"></i> impressions
+                        </span>
+
+                        <span>
+                          <i class="fas fa-square text-gray"></i> post_impressions
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                <!-- /.card -->
+
+                <!-- Bar chart -->
+                <div class="card card-primary card-outline">
+                  <div class="card-header bg-info">
+                    <h3 class="card-title">
+                      <i class="far fa-chart-bar"></i>
+                      Daily Negative Feedback From Users
+                    </h3>
+
+                    <div class="card-tools">
+                      <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                        <i class="fas fa-minus"></i>
+                      </button>
+                      <button type="button" class="btn btn-tool" data-card-widget="remove">
+                        <i class="fas fa-times"></i>
+                      </button>
+                    </div>
+                  </div>
+                  <div class="card-body">
+                    <div class="form-group">
+                        <div class="row">
+                          <div class="col-6">
+                            <label>start_date:</label> 
+                            <input class="form-control" type="text" id="bar_chart_start_date" />
+                          </div>
+                          <div class="col-6">
+                            <label>end_date:</label>
+                            <input class="form-control" type="text" id="bar_chart_end_date" />
+                          </div>
+                        </div>
+                    </div>
+                    <div class="chart">
+                      <canvas id="negative-feedback" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas>
+                    </div>
+                  </div>
+                  <!-- /.card-body-->
+                  <div class="card-footer">
+                        
+                  </div>
+                </div>
+                <!-- /.card -->
+
+                 <!-- LINE CHART -->
+                <div class="card card-info">
+                  <div class="card-header bg-info">
+                    <h3 class="card-title">Daily Organic vs Paid impressions of your posts </h3>
+
+                    <div class="card-tools">
+                      <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-minus"></i>
+                      </button>
+                      <button type="button" class="btn btn-tool" data-card-widget="remove"><i class="fas fa-times"></i></button>
+                    </div>
+                  </div>
+                  <div class="card-body">
+                    <div class="form-group">
+                        <div class="row">
+                          <div class="col-6">
+                            <label>start_date:</label> 
+                            <input class="form-control" type="text" id="Line_chart_start_date" />
+                          </div>
+                          <div class="col-6">
+                            <label>end_date:</label>
+                            <input class="form-control" type="text" id="Line_chart_end_date" />
+                          </div>
+                        </div>
+                    </div>
+                    <div class="chart">
+                      <canvas id="lineChart-1" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas>
+                    </div>
+                  </div>
+                  <!-- /.card-body -->
+                  <div class="card-footer">
+                        
+                  </div>
+                </div>
+                <!-- /.card -->
+                
+              </section>
+              <!-- right col -->
+            </div>
+            <!-- /.row (main row) -->
+            <div class = "row"> 
+              <!-- BAR CHART -->
+                <div class = "col-lg-12">
+                    <div class="card">
+                      <div class="card-header bg-info">
+                        <h3 class="card-title">Daily Organic vs Paid impressions  </h3>
+
+                        <div class="card-tools">
+                          <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-minus"></i>
+                          </button>
+                          <button type="button" class="btn btn-tool" data-card-widget="remove"><i class="fas fa-times"></i></button>
+                        </div>
+                      </div>
+                      <div class="card-body">
+                        <div class="form-group">
+                            <div class="row">
+                              <div class="col-6">
+                                <label>start_date:</label>
+                                <input class="form-control" type="text" id="impressions_chart_start_date" />
+                              </div>
+                              <div class="col-6">
+                                <label>end_date:</label>
+                                <input class="form-control" type="text" id="impressions_chart_end_date" />
+                              </div>
+                            </div>
+                        </div>
+                        <div class="chart">
+                          <canvas id="impressions-1" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas>
+                        </div>
+                      </div>
+                      <!-- /.card-body -->
+                      <div class="card-footer">
+                        
+                      </div>
+                    </div>
+                </div>
+            </div>
+                {% include "posts_table.html" %}
+          </div>
+          <!-- /.container-fluid -->
+        </section>
+        <!-- /.content -->
+      </div>
+      <!-- /.content-wrapper -->
+      
+      <!-- Control Sidebar -->
+      <aside class="control-sidebar control-sidebar-dark">
+        <!-- Control sidebar content goes here -->
+      </aside>
+      <!-- /.control-sidebar -->
+  </div>
+    <!-- ./wrapper -->
+  {% block javascript %}
+      <script src={% static 'plugins/datatables/jquery.dataTables.js' %}></script>
+      <script src={% static 'plugins/datatables-bs4/js/dataTables.bootstrap4.js' %}></script>
+      <script type="text/javascript" id = "script" pageid = "{{page_objects.page_id}}" src={% static 'dist/js/pages/dashboard.js' %}></script>
+      <script src="https://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>      
+      <script>
+        $(function () {
+          $("#example1").DataTable();
+        });
+      </script>
+  {% endblock javascript %}
+    
+{% endblock content %}
+

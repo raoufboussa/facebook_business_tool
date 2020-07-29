@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+
+{% block content %}
+{% include "navbar.html" %}
+{% include "sidebar.html" %}
+<div class="wrapper">
+    <div class="content-wrapper">
+        <!-- Content Header (Page header) -->
+        <div class="content-header">
+          <div class="container-fluid">
+                <div class="panel-body">
+    
+                    <h2 class="" > Vos pages :</h2>
+
+                    <div class="list-group">
+                        {% for page in pages %}
+                            <a href="/home?pageId={{page.page_id}}&access_token={{page.access_token}}"  class="list-group-item list-group-item-action list-group-item-primary"> {{ page.name }}</a>
+                        {% endfor %}
+                    </div>
+                    <h2> Vos Ad Accounts :</h2>
+
+                    <div class="list-group">
+                        {% for adaccount in adaccounts %}
+                            <a href="/home?adActId={{adaccount.adaccount_id}}"  class="list-group-item list-group-item-action list-group-item-secondary"> {{ adaccount.name }}</a>
+                        {% endfor %}
+                    </div>
+
+                </div>
+            </div>
+         </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}

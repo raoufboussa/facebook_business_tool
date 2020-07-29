@@ -1,0 +1,57 @@
+{% extends "account/base.html" %}
+{% load static %} 
+{% block styles %}
+    <link href="https://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css" rel="stylesheet"/>
+    <style>
+    </style>
+{% endblock styles %}
+{% block content %}
+<div class="row">
+    <div class="register-box" style="width:520px">
+        <div class="register-logo">
+            <a href="/home/edit_profile"><b>3S </b>Solution|Edit Profile</a>
+        </div>
+        <div class="card">
+            <div class="card-body register-card-body">
+                <p class="login-box-msg">Edit Your Profile</p>
+                <form method="post">
+                {% csrf_token %}
+                {{ user_form.as_p }}
+                {{ profile_form.as_p }}
+                <button type="submit">Save changes</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% block javascript %}
+    <script src={% static 'plugins/jquery/jquery.min.js' %}></script>
+    {% comment %} <script src="http://code.jquery.com/ui/1.11.0/jquery-ui.js"></script> {% endcomment %}
+    {% comment %} <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script> {% endcomment %}
+    <script src="https://code.jquery.com/ui/1.11.0/jquery-ui.js"></script>
+    <script src={% static 'plugins/jquery-ui/jquery-ui.min.js' %}></script>
+    <script>
+    $(document).ready(function() {
+        
+        $('#id_email').val();
+        console.log($('#id_email').val());
+        console.log("raouf");
+        $('#birth_date').datepicker({
+        format: 'dd-mm-yyyy'
+        });
+        $("#birth_date").datepicker({
+            changeYear: true,
+            changeMonth: true,
+            yearRange: "-70:+0", // this is the option you're looking for
+            showOn: "both", 
+            display: new Date(),
+            onSelect: function(dateText, inst) {
+                $("#birth_date").val(dateText);
+            },
+        });
+        console.log("raouf");
+    });
+    </script>
+{% endblock javascript %}
+{% endblock content %}
+

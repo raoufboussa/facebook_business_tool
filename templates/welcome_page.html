@@ -1,0 +1,560 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>My-template - Free bootstrap 3 one page template</title>
+
+    <!-- Bootstrap Core CSS -->
+    <link href={% static 'css/bootstrap.min.css' %} rel="stylesheet" type="text/css">
+
+	<!-- Font Awesome -->
+	<link href="{% static 'font-awesome/css/font-awesome.min.css' %}" rel="stylesheet" type="text/css">
+	
+    <!-- Animation -->
+	<link href="{% static 'css/animate.css' %}" rel="stylesheet" />
+	
+    <!-- MyTemplate CSS -->
+    <link href="{% static 'css/style.css' %}" rel="stylesheet">
+	
+</head>
+<style>
+        .card-img-top {
+            width: 100%;
+            height: 15vw;
+            object-fit: cover;
+        }
+    </style>
+<body>
+
+	<header id="header-banner">
+		<nav class="navbar navbar-default navbar-fixed-top fadeIn" role="navigation">
+			<div class="container">
+				
+				<!-- Brand and toggle get grouped for better mobile display -->
+				<div class="navbar-header">
+					<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#dropdown-box-1">
+						<span class="sr-only">Toggle navigation</span>
+						<span class="icon-bar"></span>
+						<span class="icon-bar"></span>
+						<span class="icon-bar"></span>
+					</button>
+					<div class="navbar-brand">
+						<a href="www.3s-dz.com" target="_blank">3S Solutions</a>
+					</div>
+				</div>
+				
+				<!-- Collect the nav links and other content for toggling -->
+				<div class="collapse navbar-collapse navbar-right" id="dropdown-box-1">
+					
+					<ul class="nav navbar-nav">
+						
+						<li><a href="#aboutus">ABOUT</a></li>
+						<li><a href="#services">SERVICES</a></li>
+						<li><a href="#toolutility">TOOL UTILITY</a></li>
+						<li><a href="#improvestrategy">IMPROVE STRATEGY</a></li>
+						<li><a href="#contactus">CONTACT</a></li>
+						{% if request.user.is_authenticated %}
+							<li class="active"><a href="/home">HOME</a></li>
+							<li><a href="{% url 'account_logout' %}">LOGOUT</a></li>
+							<li><a href="#">{{ utilisateur.user.username|upper }} POFILE</a></li>
+						{% else %}
+							<li><a href="{% url 'account_login' %}">LOGIN</a></li>
+							<li><a href="{% url 'account_signup' %}">SIGNUP</a></li>
+						{% endif %}
+					</ul>
+				</div>
+				
+			</div> <!-- /.container -->
+		</nav> <!-- /.nav -->
+	</header>
+		
+	<!-- banner -->
+    <section class="banner" id="home">
+		<div class="container">
+			<div class="slogan">
+				<h2>Ads Analytics Tool </h2>
+			</div>
+			
+			<div class="btn-circle-scroll fadeIn">
+				<a href="#section-footer" class="btn-circle">
+					<i class="fa fa-angle-double-down animated"></i>
+				</a>
+			</div>
+			
+		</div>
+    </section>
+	<!-- /.banner -->
+
+	<!-- aboutus -->
+	<div class="container">
+		<section class="aboutus" id="aboutus">
+			<div class="container">
+				<div class="row">
+					<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+						<div class="wow bounceInLeft" data-wow-delay="0.1s"> 
+							<h2>About Us</h2> 
+						</div>
+						<div class="col-lg-7">
+							<p>
+							Our service represents a dedicated tool which supports a marketing manager by gathering all the 
+							necessary information in a single place thus he can be informed of the business's state of a client
+							(pages and advertising campaigns) ,also it allows to analyze them and detect information allowing to
+							build for each customer a digital strategy  according to the different circumstances and then improve
+							it in an effective way.
+							</p>
+						</div>
+						<div class="col-lg-5">
+							<div class="img-aboutus">
+								<div class="wow fadeIn" data-wow-delay="0.3s">
+									<img src="{% static 'img/services/aboutus.png' %}" alt="" class="img-responsive img-rounded card-img-top" />
+								</div>
+							</div>
+						</div>
+					</div>				
+				</div>
+			</div>
+		</section>
+		<!-- /.aboutus -->
+		
+		<!-- services -->
+		<section class="services" id="services">
+			<div class="container">
+				
+				<div class="row">
+					<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+						<div class="wow bounceInLeft" data-wow-delay="0.1s">
+						<h2>WHAT OUR PLATEFORM OFFERS</h2>
+						</div>
+					</div>				
+				</div>
+				
+				<div class="row-padded mb-5" id="first"></div>
+				<div class="row mb-5">
+					<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+						<div class="col-sm-7">
+							<h4>STATESTICS OF FACEBOOK PAGES</h4>
+							<p>
+							You can collect important data and statestics concerning the pages owned by each client and gather them
+							in an interactive dashboard,making it possible to evaluate the different actions in order to have an 
+							effective page in that niche.
+							</p>
+						</div>
+						
+						<div class="col-sm-5">
+							<div class="avatar">
+								<div class="wow fadeIn" data-wow-delay="0.3s">
+								<img src="{% static 'img/services/facebook_page_insights.png' %}" alt="" class="img-responsive img-rounded card-img-top" />
+								</div>
+							</div>
+						</div>
+					</div>				
+				</div>
+				
+				<div class="row-padded mb-5" id="second"></div>
+				<div class="row mb-5">
+					<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+						<div class="col-sm-7">
+							<h4>STATESTICS OF ADVERTISING CAMPAIGNS</h4>
+							<p>
+							You can collect important data and statistics concerning all the advertising campaigns launched and
+							gather them in a dashboard,making it possible to carry out an analysis to improve the configuration of
+							the future campaigns.
+							</p>
+						</div>
+						
+						<div class="col-sm-5">
+							<div class="avatar">
+								<div class="wow fadeIn" data-wow-delay="0.3s">
+								<img src="{% static 'img/services/campaigns_insights.png' %}" alt="" class="img-responsive img-rounded card-img-top" />
+								</div>
+							</div>
+						</div>
+					</div>				
+				</div>
+				
+				<div class="row-padded" id="third"></div>
+				<div class="row">
+					<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+						<div class="col-sm-7">
+							<h4>INFORMATION FOR NEW DECISIONS</h4>
+							<p>
+								You can use the data collected to get an idea of ​​what is working and what is not working, in order to
+								make decisions especially what has to do with the configuration of advertising campaigns, because our
+								tool offers the functionality of offering the best configuration for a new campaign based on the
+								experiences of the campaigns already lunched.
+							</p>
+						</div>
+						
+						<div class="col-sm-5">
+							<div class="avatar">
+								<div class="wow fadeIn" data-wow-delay="0.3s">
+								<img src="{% static 'img/services/decision.png' %}" alt="" class="img-responsive img-rounded card-img-top" />
+								</div>
+							</div>
+						</div>
+					</div>				
+				</div>
+			
+			</div>
+		</section> 	
+		<!-- /.services -->
+		
+		<!-- About Tool -->
+		<section class="services" id="toolutility">
+			<div class="container">
+				
+				<div class="row">
+					<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+						<div class="wow bounceInLeft" data-wow-delay="0.1s">
+						<h2>WHAT MAKES OUR TOOL USEFUL</h2>
+						</div>
+						<p>Building a digital strategy can take a lot of time especially for new clients and it can be challenging
+						to find a suitable tool that provides the necessary functionalities in a user friendly way. This is
+						why we are proposing this new tool that is going to revolutionize digital marketing. </p>
+						
+					</div>				
+				</div>
+				
+				<div class="row-padded" id="first"></div>
+				<div class="row">
+					<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+						<div class="col-sm-7">
+							<h4>WE OFFER DIFFERENT LEVELS OF DETAIL</h4>
+							<p>
+							In ower analytics, sometimes we want to have a general idea of how our marketing is doing. But other
+							times it is necessary to dig deeper and understand what happened on the campaign level. This is why we
+							offer these two levels on granularity for Facebook Ads.
+							</p>
+						</div>
+						
+						<div class="col-sm-5">
+							<div class="avatar">
+								<div class="wow fadeIn" data-wow-delay="0.3s">
+								<img src="{% static 'img/services/level_detail.png' %}" alt="" class="img-responsive img-rounded card-img-top" />
+								</div>
+							</div>
+						</div>
+					</div>				
+				</div>
+				
+				<div class="row-padded" id="second"></div>
+				<div class="row">
+					<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+						<div class="col-sm-7">
+							<h4>WE AIM AT MAKING THINGS VERY SIMPLE</h4>
+							<p>
+							Have you ever tried a tool and did not have an idea of where to start ? YES, this happened to us too
+							and the good news are that our tool is destined for business users and so it is very intuitive and
+							easy to use.
+							</p>
+						</div>
+						
+						<div class="col-sm-5">
+							<div class="avatar">
+								<div class="wow fadeIn" data-wow-delay="0.3s">
+								<img src="{% static 'img/services/cube.jpg' %}" alt="" class="img-responsive img-rounded card-img-top" />
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				
+				<div class="row-padded" id="third"></div>
+				<div class="row">
+					<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+						<div class="col-sm-7">
+							<h4>WE WILL CONTINUE WORKING ON MAKING OUR TOOL BETTER</h4>
+							<p>
+								Right now, we use the most used plateforms among digital marketers, but in the future more plateforms
+ 								will be added and other features will also be integrated in our plateform.
+							</p>
+						</div>
+						
+						<div class="col-sm-5">
+							<div class="avatar">
+								<div class="wow fadeIn" data-wow-delay="0.3s">
+								<img src="{% static 'img/services/continu_working.png' %}" alt="" class="img-responsive img-rounded card-img-top" />
+								</div>
+							</div>
+						</div>
+					</div>				
+				</div>
+			
+			</div>
+		</section>
+
+
+		<!-- improuve strategy -->
+		<section class="services" id="improvestrategy">
+			<div class="container">
+				
+				<div class="row">
+					<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+						<div class="wow bounceInLeft" data-wow-delay="0.1s">
+						<h2>HOW CAN I IMPROOVE A DIGITAL MARKETING STRATEGY</h2>
+						</div>
+						<p>As we have mentioned earlier, ease of use had been a very important factor during the design of our
+							tool and this is why you can use the tool to improve the marketing stratigy in simple steps.
+						</p>
+						
+					</div>				
+				</div>
+				
+				<div class="row-padded" id="first"></div>
+				<div class="row">
+					<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+						<div class="col-sm-7">
+							<h4>STEP 1: CREATE AN ACCOUNT IN OUR PLATEFORM.</h4>
+							<p>
+								To guarantee your security and the privacy of your data, our clients need to open an account and have
+								their own password so that they can access their workspace.
+							</p>
+						</div>
+						
+						<div class="col-sm-5">
+							<div class="avatar">
+								<div class="wow fadeIn" data-wow-delay="0.3s">
+								<img src="{% static 'img/services/create_account.png' %}" alt="" class="img-responsive img-rounded card-img-top" />
+								</div>
+							</div>
+						</div>
+					</div>				
+				</div>
+				
+				<div class="row-padded" id="second"></div>
+				<div class="row">
+					<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+						<div class="col-sm-7">
+							<h4>STEP 2: CONNECT TO YOUR ACCOUNTS AND CONNECT YOUR PAGES.</h4>
+							<p>
+							Using very secured protocols proposed by Facebook, you can connect to your accounts then connect our
+							pages so that you can have all your clients in your workspace and from there you can start working.
+							</p>
+						</div>
+						
+						<div class="col-sm-5">
+							<div class="avatar">
+								<div class="wow fadeIn" data-wow-delay="0.3s">
+								<img src="{% static 'img/services/connect.png' %}" alt="" class="img-responsive img-rounded card-img-top" />
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				
+				<div class="row-padded" id="third"></div>
+				<div class="row">
+					<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+						<div class="col-sm-7">
+							<h4>STEP 3: CHOOSE AN ADD ACOUNT AND START WORKING ON YOUR STRATEGY.</h4>
+							<p>
+								The last step is to check your pages's and campagnes's analytics and make better decisions for your
+ 								future campagnes.
+							</p>
+						</div>
+						
+						<div class="col-sm-5">
+							<div class="avatar">
+								<div class="wow fadeIn" data-wow-delay="0.3s">
+								<img src="{% static 'img/services/strategy.png' %}" alt="" class="img-responsive img-rounded card-img-top" />
+								</div>
+							</div>
+						</div>
+					</div>				
+				</div>
+			
+			</div>
+		</section>
+
+		{% comment %} <section class="testimonials-banner" id="testimonials"></section> {% endcomment %}
+		
+		<!-- testimonials -->
+		{% comment %} <section class="testimonials">
+			<div class="container">
+				
+				<!-- row -->
+				<div class="row">
+					<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">					
+						<div class="col-sm-9">
+							<blockquote>
+								<p>
+									"Repudiandae autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe eveniet ut et voluptates repudiandae sint et molestiae non recusandae
+									Repudiandae autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe eveniet ut et voluptates repudiandae sint et molestiae non recusandae".
+								</p>
+								<footer class="blockquote-footer">
+									<strong>Mark Flix,</strong> <cite title="Source Title">Visitor B1 Visa (USA), Granted on 11 Feb 2015.</cite>
+								</footer>
+							</blockquote>
+						</div>
+						<div class="col-sm-3">
+							<div class="avatar">
+								<img src="{% static 'img/testimonials/tt.jpg' %}" class="img-responsive img-rounded" />
+							</div>
+						</div>
+					</div>
+				</div>
+				<!-- ./row -->
+				
+				<!-- row -->
+				<div class="row">
+					<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">					
+						<div class="col-sm-9">
+							<blockquote>
+								<p>
+									"Repudiandae autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe eveniet ut et voluptates repudiandae sint et molestiae non recusandae
+									Repudiandae autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe eveniet ut et voluptates repudiandae sint et molestiae non recusandae".
+								</p>
+								<footer class="blockquote-footer">
+									<strong>Mark Flix,</strong> <cite title="Source Title">Visitor B1 Visa (USA), Granted on 11 Feb 2015.</cite>
+								</footer>
+							</blockquote>
+						</div>
+						<div class="col-sm-3">
+							<div class="avatar">
+								<img src="{% static 'img/testimonials/tt.jpg' %}" class="img-responsive img-rounded" />
+							</div>
+						</div>
+					</div>
+				</div>
+				<!-- ./row -->
+				
+			</div>
+		</section> {% endcomment %}
+		<!-- /.testimonials -->
+	</div>	
+	<!-- contact us -->
+	<section class="contactus" id="contactus">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+					<div class="wow bounceInLeft" data-wow-delay="0.1s">
+					<h2>Get in touch</h2>
+					</div>
+					<div class="col-sm-8">
+						<form class="my-form" role="form">
+						  <div class="form-group">
+							<input type="text" class="form-control" id="name" placeholder="Name" required="">
+						  </div>
+						  <div class="form-group">
+							<input type="email" class="form-control" id="email" placeholder="Email" required="">
+						  </div>
+						  <div class="form-group">
+							<textarea class="form-control" name="message" id="message" rows="7" cols="25" style="resize:none;" required="required" placeholder="Message"></textarea>
+						  </div>
+						  
+						  <button type="submit" class="btn btn-default btn-block">SEND MESSAGE</button>
+						</form>
+					</div>
+					
+					<div class="col-sm-4">
+						<div class="physical-address">
+						<h4>Main Office</h4>
+				
+						<address>
+						  <strong>My Template.</strong><br>
+						  Coopérative EL AMEL N°110,<br>
+						  Vieux ain naadja Gué de Constantine<br>
+						  Alger<br>
+						  <abbr title="Phone">Bureau : </abbr> +213 (0) 23 54 30 22 <br>
+						   <abbr title="Phone">Fax : </abbr> +213 (0) 23 54 33 77
+						</address>
+
+						<address>
+						  <strong>Email</strong><br>
+						  <a href="mailto:contact@3s-dz.com">contact@3s-dz.com</a>
+						</address>	
+						<address>
+						  <strong>We're on social networks</strong><br>
+							<div class="wow fadeIn" data-wow-delay="0.1s">
+							<ul class="company-social">
+								<li class="social-facebook"><a href="#" target="_blank" title="facebook"><i class="fa fa-facebook"></i></a></li>
+								<li class="social-twitter"><a href="#" target="_blank" title="twitter"><i class="fa fa-twitter"></i></a></li>
+								<li class="social-dribble"><a href="#" target="_blank" title="dribble"><i class="fa fa-dribbble"></i></a></li>
+								<li class="social-google"><a href="#" target="_blank" title="google"><i class="fa fa-google-plus"></i></a></li>
+							</ul>
+							</div>
+						</address>	
+						</div>
+					</div>
+				</div>				
+			</div>
+		</div>
+	</section>
+	<!-- /.contact us -->
+	
+	<!-- footer -->
+	<footer id="section-footer">
+		<div class="container">
+			<div class="row">
+				<div class="col-md-12 col-lg-12">
+					<div class="wow fadeIn" data-wow-delay="0.4s">
+						<div class="btn-circle-scroll">
+							<a href="#header-banner" class="btn-circle">
+								<i class="fa fa-angle-double-up animated"></i>
+							</a>
+						</div>
+					</div>
+          <p>ESI Ecole Supérieur Informatique</p>
+					<p>&copy;&nbspCopyright 2020 - ads analytics tool. All rights reserved.</p>
+				</div>
+			</div>	
+		</div>
+	</footer>
+	<!-- /.footer -->
+	
+	
+	<!-- Core JavaScript Files -->
+	<script src="{% static 'js/jquery.min.js' %}"></script>
+	<script src="{% static 'js/bootstrap.min.js' %}"></script>
+	<script src="{% static 'js/jquery.easing.min.js' %}"></script>	
+	<script src="{% static 'js/jquery.scrollTo.js' %}"></script>
+	<script src="{% static 'js/wow.min.js' %}"></script>			<!-- Reveal animation when you scroll by wow.js. It need animate.css library -->
+	<!-- Custom Theme JavaScript -->
+	<script src="{% static 'js/custom.js' %}"></script>
+
+</body>
+
+</html>
+
+
+
+{% comment %} {% extends "base.html" %}
+{% load static %}
+{% block content %}
+<div class="wrapper">
+  <div class="container">
+
+      <div class="jumbotron">
+        <h1>Welcome to 3S-Solution</h1>
+        <p class="lead">Success is not final, failure is not fatal, It is the courage to continue that counts.</p>
+        <h3>Winston S. Churchill</h3>
+        <p><a class ="btn btn-lg btn-primary" href="{% url 'facebook_auth:home' %}" role="button">Sign in please!</a></p>
+      </div>
+
+      <h5>ESI Ecole Supérieur d'Informatique</5>
+      </br>
+      </br>
+      </br>
+      </br>
+      </br>
+      </br>
+      </br>
+      </br>
+      </br>
+      </br>
+      </br>
+      </br>
+      </br>
+
+  </div>
+
+      <footer class="footer">
+        <p>&copy; 2016 Company, Inc.</p>
+      </footer>
+{% endblock content %} {% endcomment %}

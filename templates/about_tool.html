@@ -1,0 +1,297 @@
+{% extends "base.html" %}
+{% load static %}
+{% load tag_library %}
+{% block styles %}
+    <style>
+        .card-img-top {
+            width: 100%;
+            height: 22vw;
+            object-fit: cover;
+        }
+    </style>
+{% endblock %}
+{% block content %}
+{% include "navbar.html" %}
+{% include "sidebar.html" %}
+<div class="wrapper">
+    <div class="content-wrapper">
+        <!-- Content Header (Page header) -->
+        <div class="content-header">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="card col-lg-12">
+                        <div class="card-header bg-info">
+                            <h4 class="card-title">How We Can Use This tool </h4>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-lg-8">
+                                <h5 class="card-title"> </h5>
+                                <p>Our service represents a dedicated tool which supports a marketing manager by gathering all the 
+                                necessary information in a single place thus he can be informed of the business's state of a client
+                                (pages and advertising campaigns) ,also it allows to analyze them and detect information allowing to
+                                build for each customer a digital strategy  according to the different circumstances and then improve
+                                it in an effective way. <br>
+                                This tool is used after going through some steps.
+                                </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card col-lg-12">
+                        <div class="card-header bg-info"> <!-- style="color:blue;" -->
+                            <h4 class="card-title" >Step 1: Link The Social Account  </h4>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-lg-5">
+                                <h5 class="card-title"> </h5>
+                                <p> First you have to link the facebook account to this application, so we fill out this form with the
+                                 information of the facebook account:
+                                </p>
+                                <ul>
+                                    <li>
+                                        First you have to link the user who is already registered.
+                                    </li>
+                                    <li>
+                                        Choose the facebook provider.
+                                    </li>
+                                    <li>
+                                        Copy the Facebook Uid of the account.
+                                    </li>
+                                </ul>
+                                </p>
+                                </div>
+                                <div class="col-lg-7">
+                                    <img class="card-img-top" src="{% static 'img/add social account.PNG' %}" >
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card col-lg-12">
+                        <div class="card-header bg-info">
+                            <h4 class="card-title">Step 2: Link The Social Application  </h4>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-lg-5">
+                                <h5 class="card-title"> </h5>
+                                <p>After we linked the facebook account, now we have to link the business application linked to this account,
+                                 it is the application with which we manage our business, in this application we find tools like graph explorer,
+                                  it is is the tool which gives access to the data (publications, comments, interactions ... etc.) of the pages
+                                   and ad accounts linked to this facebook account. </p>
+                                  <ul>
+                                    <li>
+                                        Choose the facebook provider.
+                                    </li>
+                                    <li>
+                                        Give the application a name, for example "Facebook App".
+                                    </li>
+                                    <li>
+                                        Copy the client Id from the Facebook application.
+                                    </li>
+                                    <li>
+                                        Copy the secret key of the Facebook application.
+                                    </li>
+                                </ul>
+                                </div>
+                                <div class="col-lg-7">
+                                    <img class="card-img-top" src="{% static 'img/add application.PNG' %}" >
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card col-lg-12">
+                        <div class="card-header bg-info">
+                            <h4 class="card-title">Step 3: Link The Social Token Of Application </h4>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-lg-5">
+                                <h5 class="card-title"> </h5>
+                                <p>Social Token is the most important code, it allows us to make http requests to get the data that we want, 
+                                so to finalize the configuration of the social application you have to extract the token </p>
+                                 <ul>
+                                    <li>
+                                        Link the application that we have already created.
+                                    </li>
+                                    <li>
+                                        Linked to the facebook account that we have already created.
+                                    </li>
+                                    <li>
+                                        Finally copy the application token.
+                                    </li>
+                                </ul>
+                                </div>
+                                <div class="col-lg-7">
+                                    <img class="card-img-top" src="{% static 'img/add socoal token.PNG' %}" >
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card col-lg-12">
+                        <div class="card-header bg-info">
+                            <h4 class="card-title">Step 4: remplire la base de donnée avec les metrics nécessaire pour le bon fonctionnement de l'outil </h4>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-lg-12">
+                                <h5 class="card-title"> </h5>
+                                <p>The Pages API allows apps to access and update a Facebook Page's settings and content, create and get Posts,
+                                 get Comments on Page owned content, get Page insights, update actions that Users are able to perform on a Page,
+                                 and much more.<br>
+                                 You have to run this script to fill the database with the necessary metrics. </p>
+                                 <ul>
+
+                                    <li>
+                                        Run : "python manage.py makemigrations" in the terminal.
+                                    </li>
+                                    <li>
+                                        Run : "python manage.py migrate".
+                                    </li>
+                                    <li>
+                                        Run : "python manage.py shell".
+                                    </li>
+                                    <li>
+                                        Copy the script below and past in the shell run to fill the database.
+                                    </li>
+                                    <li>
+                                        run to fill the database.
+                                    </li>
+                                </ul>
+                                </div>
+                                <div class="col-lg-12">
+                                    <p> from facebook_auth.models import API, Metric<br>
+                                        a1 = API(name="FacebookGraph",provider="Facebook")<br>
+                                        a2 = API(name="FacebookAds",provider="Facebook")<br>
+                                        a1.save()<br>
+                                        a2.save()<br>
+                                        m1 = Metric(name="action sur la page",description = "Le nombre de clics sur les coordonnées de votre Page et le bouton call-to-action.", API= a1,queryName= 'page_total_actions')<br>
+                                        m1.save()<br>
+                                        m2 = Metric(name="interaction sur la page",description = "Le nombre de fois où des personnes ont interagi avec vos publications à travers des réactions, des commentaires, des 
+                                        partages et autres.", API= a1,queryName= 'page_engaged_users')<br>
+                                        m2.save()<br>
+                                        m3 = Metric(name="action négative",description = "Nombre de fois où les personnes ont réagi de manière négative (par ex. retiré un J’aime ou masqué une publication).", 
+                                        API= a1,queryName= 'page_negative_feedback')<br>
+                                        m3.save()<br>
+                                        m4 = Metric(name="fans page en ligne par heur",description = "Le nombre de vos fans qui ont vu n’importe quelle publication sur Facebook un jour donné, répartis par heure
+                                        de jour (PST/PDT).", API= a1,queryName= 'page_fans_online')<br>
+                                        m4.save()<br>
+                                        m5 = Metric(name="fans page en ligne",description = "Le nombre de clics sur les coordonnées de votre Page et le bouton call-to-action.", API= a1,queryName= 'page_fans_online_per_day')<br>
+                                        m5.save()<br>
+                                        m6 = Metric(name="nouveu fans page",description = "Nombre de nouvelles personnes qui ont aimé votre Page selon qu’elles ont payé ou pas payé.", API= a1,
+                                        queryName= 'page_fan_adds_by_paid_non_paid_unique')<br>
+                                        m6.save()<br>
+                                        m7 = Metric(name="impréssions page",description = "Le nombre de fois où un contenu de votre Page ou la concernant s’est affiché sur l’écran d’une personne.
+                                        Cela inclut les publications, les stories, les visites, les pubs, les informations sociales sur les personnes qui interagissent avec votre Page et plus encore."
+                                        , API= a1,queryName= 'page_impressions')<br>
+                                        m7.save()<br>
+                                        m8 = Metric(name="impréssions payé page",description = "Nombre de fois où du contenu de votre Page ou la concernant s’est affiché sur l’écran d’une personne via une distribution payée,
+                                        comme une pub.", API= a1,queryName= 'page_impressions_paid')<br>
+                                        m8.save()<br>
+                                        m9 = Metric(name="impréssions gratuit page",description = "Le nombre de fois où du contenu de votre Page ou la concernant s’est affiché sur l’écran d’une personne via une distribution gratuite.
+                                        Cela inclut les publications, les stories, les visites, les informations sociales des personnes qui interagissent avec votre Page et plus encore.", API= a1,queryName= 'page_impressions_organic')<br>
+                                        m9.save()<br>
+                                        m10 = Metric(name="post page impression",description = "Nombre de fois où les publications de votre Page se sont affichées sur l’écran d’une personne. Par publication on entend aussi les statuts,
+                                        les photos, les liens, les vidéos et plus encore.", API= a1,queryName= 'page_posts_impressions')<br>
+                                        m10.save()<br>
+                                        m11 = Metric(name="post page impression payé",description = "Nombre de fois où les publications de votre Page se sont affichées sur l’écran d’une personne via une distribution payée,
+                                        comme une pub.", API= a1,queryName= 'page_posts_impressions_paid')<br>
+                                        m11.save()<br>
+                                        m12 = Metric(name="post page impression gratuit",description = "Nombre de fois où les publications de votre Page se sont affichées sur l’écran d’une personne via une distribution gratuite.",
+                                        API= a1,queryName= 'page_posts_impressions_organic')<br>
+                                        m12.save()<br>
+                                        m13 = Metric(name="total J’aime par jour",description = "Total par jour des réactions J’aime sur une Page.", API= a1,queryName= 'page_actions_post_reactions_like_total')<br>
+                                        m13.save()<br>
+                                        m14 = Metric(name="total J’adore par jour",description = "Total par jour des réactions J’adore sur une page.", API= a1,queryName= 'page_actions_post_reactions_love_total ')<br>
+                                        m14.save()<br>
+                                        m15 = Metric(name="total Wouah par jour",description = "Total des réactions Wouah sur une Page par jour.", API= a1,queryName= 'page_actions_post_reactions_wow_total')<br>
+                                        m15.save()<br>
+                                        m16 = Metric(name="total Haha par jour",description = "Total par jour des réactions « Haha » sur une page.", API= a1,queryName= 'page_actions_post_reactions_haha_total')<br>
+                                        m16.save()<br>
+                                        m17 = Metric(name="total désolées par jour",description = "Total par jour des réactions désolées sur une page.", API= a1,queryName= 'page_actions_post_reactions_sorry_total')
+                                        m17.save()<br>
+                                        m18 = Metric(name="total colère par jour",description = "Total par jour des réactions de colère sur une page.", API= a1,queryName= 'page_actions_post_reactions_anger_total')<br>
+                                        m18.save()<br>
+                                        m19 = Metric(name="nombre j'aime page",description = "Nombre total de personnes qui ont aimé votre page.", API= a1,queryName= 'page_fans')<br>
+                                        m19.save()<br>
+                                        m20 = Metric(name="fans par langue",description = "Ensemble de données linguistiques des personnes qui aiment votre page en fonction de la langue par défaut sélectionnée à l’accès à Facebook.",
+                                        API= a1,queryName= 'page_fans_locale')<br>
+                                        m20.save()<br>
+                                        m21 = Metric(name="destribution des fans par wilaya",description = "Ensemble des données Facebook de localisation des personnes qui aiment votre Page, triées par ville.",
+                                        API= a1,queryName= 'page_fans_city')<br>
+                                        m21.save()<br>
+                                        m22 = Metric(name="nombre de fans par pays",description = "Le nombre de personnes, agrégées par pays, qui aiment votre Page.
+                                        Seuls les 45 pays comprenant le plus de personnes qui aiment votre page sont inclus.", API= a1,queryName= 'page_fans_country')<br>
+                                        m22.save()<br>
+                                        m23 = Metric(name="nombre de fans par age",description = "Le nombre de personnes qui ont vu une de vos publications au moins une fois,
+                                        regroupé par âge et genre. Les données démographiques agrégées sont basées sur un certain nombre de facteurs tels que les informations liées
+                                        à l’âge et au genre que fournissent les utilisateurs sur leur profil Facebook. Cette valeur est une estimation.", API= a1,queryName= 'page_fans_gender_age')<br>
+                                        m23.save()<br>
+                                        m24 = Metric(name="nouveau fans",description = "Le nombre de nouvelles personnes qui ont aimé votre Page.", API= a1,queryName= 'page_fan_adds')<br>
+                                        m24.save()<br>
+                                        m25 = Metric(name="j'aime retiré",description = "Retrait des J’aime de votre Page.", API= a1,queryName= 'page_fan_removes')<br>
+                                        m25.save()<br>
+                                        m26 = Metric(name="total video vus 3s",description = "Le nombre de fois où les vidéos de votre Page ont été lues pendant au moins 3 secondes 
+                                        (ou presque en totalité lorsqu’elles sont plus courtes). Pour une même lecture vidéo, nous excluons les temps de relecture.", API= a1,queryName= 'page_video_views')<br>
+                                        m26.save()<br>
+                                        m27 = Metric(name="page video vue payé 3s",description = "Le nombre de fois où les vidéos promues de votre Page ont été lues pendant au moins 3 secondes 
+                                        (ou presque en totalité lorsqu’elles sont plus courtes). Pour chaque impression de vidéo, nous comptons les vues séparément et excluons les temps de relecture.",
+                                        API= a1,queryName= 'page_video_views_paid')<br>
+                                        m27.save()<br>
+                                        m28 = Metric(name="page video vue gratuit 3s",description = "Le nombre de fois où les vidéos de votre Page ont été lues pendant au moins 3 secondes
+                                        (ou presque en totalité si elles sont plus courtes), par couverture organique. Pour une même lecture vidéo, nous excluons les temps de relecture.",
+                                        API= a1,queryName= 'page_video_views_organic')<br>
+                                        m28.save()<br>
+                                        m29 = Metric(name="page video auto vue 3s",description = "Nombre de fois où les vidéos de votre Page ont été lues de manière automatique pendant au moins 3 secondes
+                                        (ou presque en totalité si elles font moins de 3 secondes). Pour une même lecture vidéo, nous excluons les temps de relecture.", API= a1,queryName= 'page_video_views_autoplayed')<br>
+                                        m29.save()<br>
+                                        m30 = Metric(name="page video manuel vue 3s",description = "The number of times your Page's videos played for at least 3 seconds, or for nearly their total
+                                        length if they're shorter than 3 seconds, after people clicked play. During a single instance of a video playing, we'll exclude any time spent replaying the video.",
+                                        API= a1,queryName= 'page_video_views_click_to_play')<br>
+                                        m30.save()<br>
+                                        m31 = Metric(name="total video complet vue 30s",description = "Le nombre de fois où les vidéos de votre Page ont été lues pendant au moins 30 secondes 
+                                        (ou presque en totalité si elles sont plus courtes). Pour une même lecture vidéo, nous excluons les temps de relecture.", API= a1,queryName= 'page_video_complete_views_30s')<br>
+                                        m31.save()<br>
+                                        m32 = Metric(name="video complet vue 30s payé",description = "Nombre de fois où les vidéos promues de votre Page ont été lues pendant au moins 30 secondes 
+                                        (ou presqu’en totalité si elles sont plus courtes). Pour chaque impression de vidéo, nous comptons les vues séparément et excluons les temps de relecture.", 
+                                        API= a1,queryName= 'page_video_complete_views_30s_paid')<br>
+                                        m32.save()<br>
+                                        m33 = Metric(name="video complet vue 30s gratuit",description = "Le nombre de fois où les vidéos de votre Page ont été lues pendant au moins 30 secondes 
+                                        (ou presque en totalité si elles sont plus courtes), par couverture organique. Pour une même lecture vidéo, nous excluons les temps de relecture.", 
+                                        API= a1,queryName= 'page_video_complete_views_30s_organic')<br>
+                                        m33.save()<br>
+                                        m34 = Metric(name="page vue par personne non connecté",description = "Nombre de fois où le profil d’une Page a été vu par des personnes non connectées à Facebook.", 
+                                        API= a1,queryName= 'page_views_logout')<br>
+                                        m34.save()<br>
+                                        m35 = Metric(name="page vue par personne connecté",description = "Nombre de fois où le profil d’une Page a été vu par des personnes connectées sur Facebook.", 
+                                        API= a1,queryName= 'page_views_logged_in_total')<br>
+                                        m35.save()<br>
+                                        m36 = Metric(name="cpm",description = "", API= a2,queryName= 'cpm')<br>
+                                        m36.save()<br>
+                                        m37 = Metric(name="cpc",description = "", API= a2,queryName= 'cpc')<br>
+                                        m37.save()<br>
+                                        m38 = Metric(name="Impressions",description = "impression sur la publicité", API= a2,queryName= 'impressions')<br>
+                                        m38.save()<br>
+                                        m39 = Metric(name="total reaction par type",description = "Total par jour et par type des réactions sur une page.", API= a1,queryName= 'page_actions_post_reactions_total')<br>
+                                        m39.save()<br>
+                                        m40 = Metric(name="Reach",description = "", API= a2,queryName= 'reach')<br>
+                                        m40.save()
+                                        </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>            
+            </div>
+        </div>
+    </div>
+</div>
+
+{% block javascript %}
+    
+{% endblock javascript %}
+
+
+
+{% endblock content %}

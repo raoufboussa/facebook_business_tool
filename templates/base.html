@@ -1,0 +1,116 @@
+{% load static %}
+<html>
+  <head>
+    <title>{% block head_title %}3s Solution Tool{% endblock %}</title>
+      {% block extra_head %} 
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="description" content="">
+        <meta name="author" content="">
+        <link href={% static "/react/static/css/main.4e273df1.css" %} rel="stylesheet">
+        <link rel="stylesheet" href={% static 'bootstrap/css/bootstrap.min.css' %}>
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.11.2/css/all.css">
+        <link href="{% static 'bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+        {% comment %} <link href="{% static 'bootstrap/css/mdb.min.css' %}" rel="stylesheet"> {% endcomment %}
+        <link href="{% static 'bootstrap/css/style.min.css' %}" rel="stylesheet">
+        <!-- Tell the browser to be responsive to screen width -->
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <!-- Font Awesome -->
+        <link rel="stylesheet" href={% static 'plugins/fontawesome-free/css/all.min.css' %}>
+        <!-- Ionicons -->
+        <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+        <!-- Tempusdominus Bbootstrap 4 -->
+        <link rel="stylesheet" href={% static 'plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css' %}>
+        <!-- iCheck -->
+        <link rel="stylesheet" href={% static 'plugins/icheck-bootstrap/icheck-bootstrap.min.css' %}>
+        <!-- JQVMap -->
+        <link rel="stylesheet" href={% static 'plugins/jqvmap/jqvmap.min.css' %}>
+        <!-- Theme style -->
+        <link rel="stylesheet" href={% static 'dist/css/adminlte.min.css' %}>
+        <!-- overlayScrollbars -->
+        <link rel="stylesheet" href={% static 'plugins/overlayScrollbars/css/OverlayScrollbars.min.css' %}>
+        <!-- Daterange picker -->
+        <link rel="stylesheet" href={% static 'plugins/daterangepicker/daterangepicker.css' %}>
+        <!-- summernote -->
+        <link rel="stylesheet" href={% static 'plugins/summernote/summernote-bs4.css' %}>
+        <!-- Google Font: Source Sans Pro -->
+        <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
+      {% endblock %}
+      {% block styles %}
+
+      {% endblock %}
+       
+  </head>
+  
+  <body class="hold-transition sidebar-mini layout-fixed">
+            {% if messages %}
+              {% for message in messages %}
+                <div class="float-right alert alert-{{ message.tags }} alert-dismissible " role="alert">
+                {{message}}
+                  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+              {% endfor %}
+            {% endif %}
+
+    {% block content %}
+
+    {% endblock content %}
+   
+   {% include "footer.html" %}
+
+  
+    {% block extra_body %}
+   
+      <!-- jQuery -->
+      <script src={% static 'plugins/jquery/jquery.min.js' %}></script>
+      <!-- jQuery UI 1.11.4 -->
+      <script src={% static 'plugins/jquery-ui/jquery-ui.min.js' %}></script>
+      <!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
+      <script>
+        $.widget.bridge('uibutton', $.ui.button)
+      </script>
+      <!-- Bootstrap 4 -->
+      <script src={% static 'plugins/bootstrap/js/bootstrap.bundle.min.js' %}></script>
+      <!-- ChartJS -->
+      <script src={% static 'plugins/chart.js/Chart.min.js' %}></script>
+      <!-- Sparkline -->
+      <script src={% static 'plugins/sparklines/sparkline.js' %}></script>
+      <!-- JQVMap -->
+      <script src={% static 'plugins/jqvmap/jquery.vmap.min.js' %}></script>
+      <script src={% static 'plugins/jqvmap/maps/jquery.vmap.usa.js' %}></script>
+      <!-- jQuery Knob Chart -->
+      <script src={% static 'plugins/jquery-knob/jquery.knob.min.js' %}></script>
+      <!-- daterangepicker -->
+      <script src={% static 'plugins/moment/moment.min.js' %}></script>
+      <script src={% static 'plugins/daterangepicker/daterangepicker.js' %}></script>
+      <!-- Tempusdominus Bootstrap 4 -->
+      <script src={% static 'plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js' %}></script>
+      <!-- Summernote -->
+      <script src={% static 'plugins/summernote/summernote-bs4.min.js' %}></script>
+      <!-- overlayScrollbars -->
+      <script src={% static 'plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js' %}></script>
+      <!-- AdminLTE App -->
+      <script src={% static 'dist/js/adminlte.js' %}></script>
+      <!-- AdminLTE for demo purposes -->
+      <script src={% static 'dist/js/demo.js' %}></script>
+      <!-- PAGE SCRIPTS -->
+      {% comment %} <script src={% static 'dist/js/pages/dashboard2.js' %}></script> {% endcomment %}
+      <script src="https://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>  
+      <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+      <!-- jQuery Mapael -->
+      <script src={% static 'plugins/jquery-mousewheel/jquery.mousewheel.js' %}></script>
+      <script src={% static 'plugins/raphael/raphael.min.js' %}></script>
+      <script src={% static 'plugins/jquery-mapael/jquery.mapael.min.js' %}></script>
+      <script src={% static 'plugins/jquery-mapael/maps/usa_states.min.js' %}></script>
+    {% endblock %}
+
+    {% block javascript %}
+    
+    {% endblock %}
+
+   
+  </body>
+</html>

@@ -1,0 +1,121 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+    {% include "navbar.html" %}
+    {% include "sidebar.html" %}
+    <div class="wrapper">
+        <div class="content-wrapper">
+            <div class="content-header">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-6">
+                            <div class="card">
+                                <div class="card-header bg-info">
+                                    Synchronous Pages Data
+                                </div>
+                                <div class="card-body">
+                                    <label>Choose page to Synchronous:</label> 
+                                    <select class="form-control" id="mySelectA">
+                                        {% for page in pages %}
+                                            <option id="{{page.page_id}}" accesstoken="{{page.access_token}}">{{page.name}}</option>
+                                        {% endfor %}
+                                    </select>
+                                    <p class="card-text">
+                                        synchronizing the page means that we will add to the database the new insights metrics of the pages since the last update.
+                                    </p>
+                                    <p class="card-text">
+                                            the process can take a long time, be patient.
+                                    </p>
+                                </div>
+                                <div class="card-footer">
+                                    <a href="#" class="btn btn-primary" id = "page">Synchronous</a>
+                                    <button href="#" class="btn btn-success float-right" id = "page">Synchronous All Pages</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="card">
+                                <div class="card-header bg-info">
+                                    Synchronous ad_account Data
+                                </div>
+                                <div class="card-body">
+                    
+                                    <label>Choose Adaccount to Synchronous:</label> 
+                                    <select class="form-control" id="mySelectB">
+                                        {% for account in ad_account %}
+                                            <option id="{{account.adaccount_id}}">{{account.name}}</option>
+                                        {% endfor %}
+                                    </select>
+                                    <p class="card-text">
+                                        synchronous ad account means that we will add to the database the new advertisements made since the last update.
+                                    </p>
+                                    <p class="card-text">
+                                            the process can take a long time, be patient.
+                                    </p>
+                                </div>
+                                <div class="card-footer">
+                                    <a href="#" class="btn btn-primary" id = "adaccount">Synchronous</a>
+                                    <button href="#" class="btn btn-success float-right" id="adaccount">Synchronous All ad_accounts</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                     <div class = "row justify-content-center">
+                        <div class="col-10 ">
+                            <div class="card ">
+                                <div class="card-header bg-info">
+                                    Synchronous Campaigns Insights
+                                </div>
+                                <div class="card-body">
+                                        <label>Choose Adaccount to Synchronous:</label> 
+                                        <select class="form-control" id="mySelectC">
+                                            {% for account in ad_account %}
+                                                <option id="{{account.adaccount_id}}">{{account.name}}</option>
+                                            {% endfor %}
+                                        </select>
+                                        <p class="card-text">
+                                            synchronous all campaigns insights data since the last update.
+                                        </p>
+                                        <p class="card-text">
+                                            the process can take a long time, be patient.
+                                        </p>
+                                </div>
+                                <div class="card-footer">
+                                    <a href="#" class="btn btn-primary" id = "campaigns">Synchronous campaigns</a>
+                                    <button href="#" class="btn btn-success float-right" id="campaigns">Synchronous All ad_accounts campaigns</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div> 
+                    <div class="row justify-content-center">
+                        <div class="col-8 ">
+                                <div class="card ">
+                                <div class="card-header bg-info">
+                                    Synchronous All Data
+                                </div>
+                                <div class="card-body">
+                                    <p class="card-text">
+                                        synchronous all ad account and pages data since the last update.
+                                    </p>
+                                    <p class="card-text">
+                                        the process can take a long time, be patient.
+                                    </p>
+                                </div>
+                                <div class="card-footer">
+                                    <a href="{% url 'facebook_auth:getdata'%}" class="btn btn-primary float-right" id="adaccounts_pages">Synchronous All
+                                    </a>
+                                </div>
+                                
+                            </div>
+                        </div>
+                    </div>       
+                </div>
+            </div>
+        </div>            
+    </div>
+    {% block javascript %}
+        <script type="text/javascript" src={% static 'dist/js/pages/synchronous.js' %}></script>
+    {% endblock javascript %}
+{% endblock content %}
+

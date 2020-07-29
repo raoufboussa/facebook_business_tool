@@ -1,0 +1,22 @@
+
+{% extends "account/base.html" %}
+{% load static %} 
+
+{% block content %}
+<div class="login-box">
+<!-- /.login-logo -->
+    <div class="card">
+        <div class="card-body login-card-body">
+            <p class="login-box-msg">upload img for your profile</p>
+            <form action="/home/upload_pic?pageId={{pageId}}" method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                    <p>
+                        <input id="id_image" type="file" class="btn btn-info btn-block" name="image">
+                    </p>
+                    <input class="btn btn-primary btn-block" type="submit" value="Submit" />
+            </form>
+        </div>
+    </div>
+</div>
+<!-- /.login-box -->
+{% endblock content %}

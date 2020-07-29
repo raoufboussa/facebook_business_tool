@@ -1,0 +1,58 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>3S Solution| Log in</title>
+    <!-- Tell the browser to be responsive to screen width -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href={% static 'plugins/fontawesome-free/css/all.min.css' %} >
+    <!-- Ionicons -->
+    <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+    <!-- icheck bootstrap -->
+    <link rel="stylesheet" href={% static 'plugins/icheck-bootstrap/icheck-bootstrap.min.css' %}>
+    <!-- Theme style -->
+    <link rel="stylesheet" href={% static 'dist/css/adminlte.min.css' %}>
+    <!-- Google Font: Source Sans Pro -->
+    <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
+    <link href="https://code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css" rel="stylesheet" type="text/css">
+  </head>
+  <body class="hold-transition login-page">
+
+            {% if messages %}
+              {% for message in messages %}
+                <div class="float-right alert alert-{{ message.tags }} alert-dismissible " role="alert">
+                {{message}}
+                  
+                </div>
+              {% endfor %}
+            {% endif %}
+    {% comment %} {% if messages %}
+        {% for message in messages %}
+          <div class="alert alert-{{ message.tags }} alert-dismissible " role="alert">
+           {{message}}
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+        {% endfor %}
+    {% endif %} {% endcomment %}
+
+    {% block content %}
+
+
+    {% endblock content %}
+
+    {% block extra_body %}
+      {% comment %} <script src={% static 'plugins/jquery/jquery.min.js' %}></script> {% endcomment %}
+      <!-- Bootstrap 4 -->
+      <script src={% static 'plugins/bootstrap/js/bootstrap.bundle.min.js' %}></script>
+      <!-- AdminLTE App -->
+      <script src={% static 'dist/js/adminlte.min.js' %}></script>
+      
+    {% endblock extra_body %}
+  </body>
+</html>

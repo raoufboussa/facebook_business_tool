@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% block content %}
+{% include "navbar.html" %}
+{% include "sidebar.html" %}
+<div class="wrapper">
+    <div class="content-wrapper">
+        <!-- Content Header (Page header) -->
+        <div class="content-header">
+          <div class="container-fluid">
+                <div class="panel-body">
+                    <h2> Your Ad Accounts :</h2>
+                    <div class="row">
+                        {% for adaccount in adaccounts %}
+                                <div class="col-lg-3">
+                                    <div class="card">
+                                        <div class="card-header bg-info">
+                                            <h3 class="card-title">
+                                                {{ adaccount.name }}
+                                            </h3>
+                                        </div><!-- /.card-header -->
+                                        <div class="card-body">
+                                            
+                                        </div>
+                                        <!-- /.card-body -->
+                                        <div class="card-footer">
+                                            <a class="btn btn-primary float-left" href="/home?pageId={{page.page_id}}&access_token={{page.access_token}}">Examinate</a>
+                                        </div>
+                                        <!-- /.card-footer -->
+                                    </div>
+                                    <!-- /.card -->
+                                </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+         </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}

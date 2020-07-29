@@ -1,0 +1,371 @@
+{% extends "base.html" %}
+{% load tag_library %}
+{% block content %}
+{% include "navbar.html" %}
+{% include "sidebar.html" %}
+<div class="wrapper">
+    <div class="content-wrapper">
+        <!-- Content Header (Page header) -->
+        <div class="content-header">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="card " style="width: 100%;">
+                        <div class="card-header">
+                            <h3 class="card-title">Imput Campaign Parameters</h3>
+                        </div>
+                        <div class="card-body">
+                                    <form class="login" action="{% url 'facebook_auth:experience' %}" method="post" id="form1">
+                                        {% csrf_token %}
+                                        <div class="row">
+                                            <div class="col-lg-6">
+                                            <h6 class="login-box-msg">Choose at least one Parameters </h6>
+                                            {% comment %} <div class="form-group">
+                                                <label>Campaign Name </label>
+                                                <input id="id_login" autofocus="autofocus" type="text" name="name" class="form-control" placeholder="campaign name" maxlength="150" required="false">
+                                            </div> {% endcomment %}
+                                            <div class="form-group">
+                                                <label for="exampleFormControlInput1">Campaign Objective </label>
+                                                <select autofocus="autofocus" type="text" name="Objective" class="form-control" placeholder="Campaign Objective" maxlength="150" >
+                                                    <option disabled selected value> -- select an option -- </option>
+                                                    <!--<option class="active"></option>-->
+                                                    {% for element in objectivs_table %}
+                                                        <option value="{{ element }}">{{element}}</option>
+                                                    {% endfor %}
+                                                </select>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="exampleFormControlInput1">Campaign Domain </label>
+                                                </br>
+                                                <select autofocus="autofocus" type="text" name="Domain" class="form-control" placeholder="Campaign Domain" maxlength="150" >
+                                                    <option disabled selected value> -- select an option -- </option>
+                                                    <!--<option class="active"></option>-->
+                                                    {% for element in domains_table %}
+                                                        <option value="{{ element }}">{{element}}</option>
+                                                    {% endfor %}
+                                                </select>
+                                            </div>
+                                        
+                                            <div class="form-group">
+                                                <label for="exampleFormControlInput1">Campaign Gender </label>
+                                                <select autofocus="autofocus" type="text" name="Gender" class="form-control" placeholder="Campaign Gender" maxlength="150" >
+                                                    <option disabled selected value> -- select an option -- </option>
+                                                    <!--<option class="active"></option>-->
+                                                    {% for element in genders_table %}
+                                                        <option value="{{ element }}">{{element}}</option>
+                                                    {% endfor %}
+                                                    
+                                                </select>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label for="exampleFormControlInput1">Geographic Places </label>
+                                                <select autofocus="autofocus" type="text" name="Places" class="form-control" placeholder="Geographic places" maxlength="150" >
+                                                    <option disabled selected value> -- select an option -- </option>
+                                                    <!--<option class="active"></option>-->
+                                                    {% for element in regions_table %}
+                                                        <option value="{{ element }}">{{element}}</option>
+                                                    {% endfor %}
+                                                    
+                                                </select>
+                                            </div>
+
+                                            <div class="form-group">
+                                            
+                                                <label for="exampleFormControlInput1">Campaign Devices </label>
+                                                <select autofocus="autofocus" type="text" name="Devices" class="form-control" placeholder="Campaign Devices" maxlength="150" >
+                                                    <option disabled selected value> -- select an option -- </option>
+                                                    <!--<option class="active"></option>-->
+                                                    {% for element in devices_table %}
+                                                        <option value="{{ element }}">{{element}}</option>
+                                                    {% endfor %}
+                                                    
+                                                </select>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="exampleFormControlInput1">Campaign Platforms </label>
+                                                <select autofocus="autofocus" type="text" name="platforms" class="form-control" placeholder="Campaign platforms" maxlength="150" >
+                                                    <option disabled selected value> -- select an option -- </option>
+                                                    <!--<option class="active"></option>-->
+                                                    {% for element in publisher_platforms_table %}
+                                                        <option value="{{ element }}">{{element}}</option>
+                                                    {% endfor %}
+                                                </select>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="exampleFormControlInput1">Campaign Positions </label>
+                                                <select autofocus="autofocus" type="text" name="Positions" class="form-control" placeholder="Campaign placements" maxlength="150" >
+                                                    <option disabled selected value> -- select an option -- </option>
+                                                    <!--<option class="active"></option>-->
+                                                    {% for element in positions_table %}
+                                                        <option value="{{ element }}">{{element}}</option>
+                                                    {% endfor %}
+                                                </select>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="exampleFormControlInput1">Campaign Country </label>
+                                                <select autofocus="autofocus" type="text" name="Country" class="form-control" placeholder="Campaign Country" maxlength="150" >
+                                                    <option disabled selected value> -- select an option -- </option>
+                                                    <!--<option class="active"></option>-->
+                                                    {% for element in country_table %}
+                                                        <option value="{{ element }}">{{element}}</option>
+                                                    {% endfor %}
+                                                </select>
+                                            </div>
+                                            </div>
+                                            <div class="col-lg-3 container">
+                                            <h6 class="login-box-msg">Choose The Metric Of Feltring </h6>
+                                                <div class="form-group">
+													<label for="exampleFormControlInput1">Metrics </label>
+													<div class="form-check">
+													<label class="form-check-label">
+														<input type="radio" class="form-check-input" name="filter" value="cpc">CPC
+													</label>
+													</div>
+													<div class="form-check">
+													<label class="form-check-label">
+														<input type="radio" class="form-check-input" name="filter" value="cpp">CPP
+													</label>
+													</div>
+													<div class="form-check ">
+													<label class="form-check-label">
+														<input type="radio" class="form-check-input" name="filter" value="cpm">CPM
+													</label>
+													</div> 
+													<div class="form-check ">
+													<label class="form-check-label">
+														<input type="radio" class="form-check-input" name="filter" value="ctr">CTR
+													</label>
+													</div> 
+													<div class="form-check ">
+													<label class="form-check-label">
+														<input type="radio" class="form-check-input" name="filter" checked value="efficiency">Efficiency(system)
+													</label>
+													</div> 
+												</div>
+												<div class="row">
+													<div class="col-8 float-right">
+														<button type="submit" class="btn btn-primary btn-block" >Get Perfect Parameters</button>
+													</div>
+												</div> 
+											</div>
+											</div>
+                                    </form>
+                                </div> 
+                        </div>
+                </div>
+                {% if campaigns  %}
+                {% if data %}
+                <div class = "row" id = "experience">
+                    {% for ads,cpc,cpp,cpm,ctr,efficiency,counts in result %}
+                        <div class = "col-lg-4">
+                            <div class="card ">
+                                <div class="card-header bg-info">
+                                    <h1 class="card-title">
+                                        <i class="fas fa-info-circle"></i>
+                                        Experience{{ forloop.counter }}
+                                    </h1>
+                                </div>
+                                <div class="card-body">
+                                    <ul class="list-group list-group-flush">
+                                        <li class="list-group-item"> Campaign Objective: <br> 
+                                        <p class="card-text">{{ ads.objective }}</p>
+                                        </li>
+                                        <li class="list-group-item"> Campaign Domain: <br> 
+                                        <p class="card-text">{{ads.niche}}</p>
+                                        </li>
+                                        <li class="list-group-item"> Campaign Age: <br> 
+                                        <p class="card-text">{{ads.age_min}} to {{ads.age_max}}</p>
+                                        </li>
+                                        <li class="list-group-item"> Campaign Genders: <br> 
+                                        <p class="card-text">{{ads.genders}}</p>
+                                        </li>
+                                        {% if method_filter == "efficiency" %}
+                                   
+                                            <li class="list-group-item"> Campaign CPC: <br>
+                                            {% if cpc < 0.4 %}
+                                            <p class="card-text" style="color:green">$ {{cpc|stringformat:".3f"}} <i class="fas fa-arrow-up bg-success float-right"></i></p>
+                                            {% else %}
+                                                {% if cpc < 0.7%}
+                                                    <p class="card-text" style="color:orange">$ {{cpc|stringformat:".3f"}} <i class="fas fa-arrow-right bg-warning float-right"></i></p>
+                                                {% else %}
+                                                    <p class="card-text" style="color:red">$ {{cpc|stringformat:".3f"}} <i class="fas fa-arrow-down bg-danger float-right"></i></p>
+                                                {% endif %}
+                                            {% endif %}
+                                            </li>
+                                            <li class="list-group-item"> Campaign CPM: <br> 
+                                            {% if cpc < 0.4 %}
+                                            <p class="card-text" style="color:green">$ {{cpm|stringformat:".3f"}} <i class="fas fa-arrow-up bg-success float-right"></i></p>
+                                            {% else %}
+                                                {% if cpc < 0.7%}
+                                                    <p class="card-text" style="color:orange">$ {{cpm|stringformat:".3f"}} <i class="fas fa-arrow-right bg-warning float-right"></i></p>
+                                                {% else %}
+                                                    <p class="card-text" style="color:red">$ {{cpm|stringformat:".3f"}} <i class="fas fa-arrow-down bg-danger float-right"></i></p>
+                                                {% endif %}
+                                            {% endif %}
+                                            </li>
+                                            <li class="list-group-item"> Campaign CPP: <br> 
+                                            {% if cpc < 0.4 %}
+                                            <p class="card-text" style="color:green">$ {{cpp|stringformat:".3f"}} <i class="fas fa-arrow-up bg-success float-right"></i></p>
+                                            {% else %}
+                                                {% if cpc < 0.7%}
+                                                    <p class="card-text" style="color:orange">$ {{cpp|stringformat:".3f"}} <i class="fas fa-arrow-right bg-warning float-right"></i></p>
+                                                {% else %}
+                                                    <p class="card-text" style="color:red">$ {{cpp|stringformat:".3f"}} <i class="fas fa-arrow-down bg-danger float-right"></i></p>
+                                                {% endif %}
+                                            {% endif %}
+                                            </li>
+                                            {% if ctr < 6 %}
+                                                <li class="list-group-item"> Campaign CTR: <br> 
+                                                <p class="card-text" style="color:green">% {{ctr|stringformat:".3f"}}</p>
+                                                </li>
+                                            {% else %}
+                                                {% if ctr < 10 %}
+                                                    <li class="list-group-item"> Campaign CTR: <br> 
+                                                    <p class="card-text" style="color:orange">% {{ctr|stringformat:".3f"}}</p>
+                                                    </li>
+                                                {% else %}
+                                                    <li class="list-group-item"> Campaign CTR: <br> 
+                                                    <p class="card-text" style="color:red">% {{ctr|stringformat:".3f"}}</p>
+                                                    </li>
+                                                {% endif %}
+                                            {% endif %}
+                                            {% if efficiency > 25 %}
+                                                <li class="list-group-item"> Campaign Efficiency: <br> 
+                                                <p class="card-text" style="color:green">{{efficiency|stringformat:".3f"}}</p>
+                                                </li> 
+                                            {% else %}
+                                                {% if efficiency > 15 %}
+                                                    <li class="list-group-item"> Campaign Efficiency: <br> 
+                                                    <p class="card-text" style="color:orange">{{efficiency|stringformat:".3f"}}</p>
+                                                    </li> 
+                                                {% else %}
+                                                    <li class="list-group-item"> Campaign Efficiency: <br> 
+                                                    <p class="card-text" style="color:red">{{efficiency|stringformat:".3f"}}</p>
+                                                    </li> 
+                                                {% endif %}
+                                            {% endif %}
+                                             
+                                        {% else %}
+                                            {% if method_filter == "cpc" %}
+                                                <li class="list-group-item"> Campaign CPC: <br>
+                                                {% if cpc < 0.4 %}
+                                                <p class="card-text" style="color:green">$ {{cpc|stringformat:".3f"}} <i class="fas fa-arrow-up bg-success float-right"></i></p>
+                                                {% else %}
+                                                    {% if cpc < 0.7%}
+                                                        <p class="card-text" style="color:orange">$ {{cpc|stringformat:".3f"}} <i class="fas fa-arrow-right bg-warning float-right"></i></p>
+                                                    {% else %}
+                                                        <p class="card-text" style="color:red">$ {{cpc|stringformat:".3f"}} <i class="fas fa-arrow-down bg-danger float-right"></i></p>
+                                                    {% endif %}
+                                                {% endif %}
+                                                </li>
+                                            {% endif %}
+
+                                            {% if  method_filter == "cpp" %}
+                                                <li class="list-group-item"> Campaign CPP: <br> 
+                                                {% if cpc < 0.4 %}
+                                                <p class="card-text" style="color:green">$ {{cpp|stringformat:".3f"}} <i class="fas fa-arrow-up bg-success float-right"></i></p>
+                                                {% else %}
+                                                    {% if cpc < 0.7%}
+                                                        <p class="card-text" style="color:orange">$ {{cpp|stringformat:".3f"}} <i class="fas fa-arrow-right bg-warning float-right"></i></p>
+                                                    {% else %}
+                                                        <p class="card-text" style="color:red">$ {{cpp|stringformat:".3f"}} <i class="fas fa-arrow-down bg-danger float-right"></i></p>
+                                                    {% endif %}
+                                                {% endif %}
+                                                </li>
+                                            {% endif %}
+
+                                            {% if  method_filter == "cpm" %}
+                                                <li class="list-group-item"> Campaign CPM: <br> 
+                                                {% if cpc < 0.4 %}
+                                                <p class="card-text" style="color:green">$ {{cpm|stringformat:".3f"}} <i class="fas fa-arrow-up bg-success float-right"></i></p>
+                                                {% else %}
+                                                    {% if cpc < 0.7%}
+                                                        <p class="card-text" style="color:orange">$ {{cpm|stringformat:".3f"}} <i class="fas fa-arrow-right bg-warning float-right"></i></p>
+                                                    {% else %}
+                                                        <p class="card-text" style="color:red">$ {{cpm|stringformat:".3f"}} <i class="fas fa-arrow-down bg-danger float-right"></i></p>
+                                                    {% endif %}
+                                                {% endif %}
+                                                </li>
+                                            {% endif %}
+
+                                            {% if  method_filter == "ctr" %}
+                                                <li class="list-group-item"> Campaign CTR: <br> 
+                                                {% if ctr < 6 %}
+                                                <p class="card-text" style="color:green">% {{ctr|stringformat:".3f"}}</p>
+                                                {% else %}
+                                                    {% if ctr < 10 %} 
+                                                        <p class="card-text" style="color:orange">% {{ctr|stringformat:".3f"}}</p>                                                        
+                                                    {% else %}                                                        
+                                                        <p class="card-text" style="color:red">% {{ctr|stringformat:".3f"}}</p>
+                                                    {% endif %}
+                                                {% endif %}
+                                                </li>
+                                            {% endif %}
+                                        {% endif %}
+                                        {% if counts > 3 %}
+                                        <li class="list-group-item" style="color:green"> Campaign counts with these Parameters: <br> 
+                                        <p class="card-text" style="color:green">{{counts}}</p>
+                                        </li>
+                                        {% else %}
+                                            {% if counts > 1 %}
+                                                <li class="list-group-item" style="color:orange"> Campaign counts with these Parameters: <br> 
+                                                <p class="card-text" style="color:orange">{{counts}}</p>
+                                                </li>
+                                            {% else %}
+                                                <li class="list-group-item" style="color:red"> Campaign counts with these Parameters: <br> 
+                                                <p class="card-text" style="color:red">{{counts}}</p>
+                                                </li>
+                                            {% endif %}
+                                        {% endif %}
+                                        <li class="list-group-item"> Campaign Clicks: <br> 
+                                        <p class="card-text"> {{ads.clicks}}</p>
+                                        </li>
+                                        <li class="list-group-item"> Campaign Frequency: <br> 
+                                        <p class="card-text">{{ads.frequency}}</p>
+                                        </li>
+                                        <li class="list-group-item"> Campaign Location Types: <br> 
+                                        <p class="card-text">{{ads.location_types}}</p>
+                                        </li>
+                                        <li class="list-group-item"> Campaign Country: <br> 
+                                        <p class="card-text">{{ads.country}}</p>
+                                        </li>
+                                        <li class="list-group-item"> Campaign Citie: <br> 
+                                        <p class="card-text">{{ads.citie}}</p>
+                                        </li>
+                                        <li class="list-group-item"> Campaign Region: <br> 
+                                        <p class="card-text">{{ads.region}}</p>
+                                        </li>
+                                        <li class="list-group-item"> Campaign Device Platforms: <br> 
+                                        <p class="card-text">{{ads.device_platforms}}</p>
+                                        </li>
+                                        <li class="list-group-item"> Campaign Publisher Platforms: <br> 
+                                        <p class="card-text">{{ads.publisher_platforms}}</p>
+                                        </li>
+                                        <li class="list-group-item"> Campaign Positions: <br> 
+                                        <p class="card-text">{{ads.positions}}</p>
+                                        </li>
+                                    </ul>
+                                </div><!-- /.card-body -->
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+                {% else %}
+                <div class="alert alert-info" role="alert">
+                    Data is limited ! Try with other Parameters
+                </div>
+                {% endif %}
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+
+{% block javascript %}
+    
+{% endblock javascript %}
+
+
+
+{% endblock content %}
