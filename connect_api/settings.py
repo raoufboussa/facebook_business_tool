@@ -42,8 +42,6 @@ INSTALLED_APPS = [
     'facebook_business',
     'facebook_auth',
     'rest_framework',
-    'FacebookOAuth',
-    'pseudoAPI',
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
