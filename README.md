@@ -1,11 +1,11 @@
 # facebook_business_tool
-platform that help in the domain of marketing digital especialy in facebook marketing
+plateform that help in the domain of marketing digital especialy in facebook marketing
 
 ### requirements
-    pip install -r requirements --user
+    pip install -r requirements.txt
 
 ### build
-    ./manage.py migrate
+    python manage.py migrate
     
 ### run
-    ./manage.py runserver
+    python manage.py runserver
