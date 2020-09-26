@@ -16,8 +16,8 @@
             </a>
           </li>
           <li class="nav-item d-none d-sm-inline-block">
-            <a class="nav-link " href="/home/edit_profile">
-               {{ utilisateur.user.username }} profile
+            <a class="nav-link " href="{% url 'facebook_auth:edit_profile' %}">
+              Profile
             </a>
           </li>
           {% else %}
@@ -32,6 +32,11 @@
             </a>
           </li>
         {% endif %}
+        <li class="nav-item d-none d-sm-inline-block">
+          <a class="nav-link {% if "/" == request.path %} active{% endif %}" href="{% url 'facebook_auth:welcome_page' %}">
+              welcome page
+          </a>
+        </li>
     </ul>
     <!-- Right navbar links -->
     <ul class="navbar-nav ml-auto">

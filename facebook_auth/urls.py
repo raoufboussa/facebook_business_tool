@@ -7,7 +7,8 @@ from django.conf.urls.static import static
 app_name = 'facebook_auth'
 
 urlpatterns = [
-    path('',views.login_page),
+    path('',views.welcome_page,name='welcome_page'),
+    path('send_mail/',views.send_mail,name='send_mail'),
     path('getdata/',views.get_data,name='getdata'),
     path('home/',views.home,name='home'),
     path('home/data_table',views.data_table,name='data_table'),
@@ -15,6 +16,8 @@ urlpatterns = [
     path('home/upload_pic',views.upload_pic,name='upload_pic'),
     path('home/page',views.dashbaord_page,name='page'),
     path('home/export',views.csv_export,name='export'),
+    path('home/export_excel',views.excel_export,name='export_excel'),
+    path('home/report',views.report,name='report'),
     path('home/about_tool',views.about_tool,name='about_tool'),
     path('home/edit_profile',views.edit_profile,name='edit_profile'),
     path('home/adaccount',views.dashbaord_adaccount,name='adaccount'),

@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 {% load static %}
-
+{% block styles %}
+{% endblock %}
 {% block content %}
     {% include "navbar.html" %}
     {% include "sidebar.html" %}
@@ -61,8 +62,8 @@
                             </div>
                         </div>
                     </div>
-                     <div class = "row justify-content-center">
-                        <div class="col-10 ">
+                    <div class = "row">
+                        <div class="col-6 ">
                             <div class="card ">
                                 <div class="card-header bg-info">
                                     Synchronous Campaigns Insights
@@ -87,9 +88,7 @@
                                 </div>
                             </div>
                         </div>
-                    </div> 
-                    <div class="row justify-content-center">
-                        <div class="col-8 ">
+                        <div class="col-6 ">
                                 <div class="card ">
                                 <div class="card-header bg-info">
                                     Synchronous All Data
@@ -101,21 +100,31 @@
                                     <p class="card-text">
                                         the process can take a long time, be patient.
                                     </p>
+                                    <br>
+                                    <br>
+
                                 </div>
                                 <div class="card-footer">
-                                    <a href="{% url 'facebook_auth:getdata'%}" class="btn btn-primary float-right" id="adaccounts_pages">Synchronous All
+                                    <a href="{% url 'facebook_auth:getdata'%}" class="btn btn-primary float-right" onclick="return loading();" id="adaccounts_pages">Synchronous All
                                     </a>
                                 </div>
                                 
                             </div>
-                        </div>
-                    </div>       
+                        </div>      
+                    </div> 
                 </div>
             </div>
         </div>            
     </div>
     {% block javascript %}
         <script type="text/javascript" src={% static 'dist/js/pages/synchronous.js' %}></script>
+        <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+        <script type="text/javascript">
+            function loading () {
+                $("body").addClass("loading"); 
+                // return true or false, depending on whether you want to allow the `href` property to follow through or not
+            }
+        </script>
     {% endblock javascript %}
 {% endblock content %}
 

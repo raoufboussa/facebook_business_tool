@@ -7,9 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="">
     <meta name="author" content="">
-
-    <title>My-template - Free bootstrap 3 one page template</title>
-
+    <title>3s Solution Tool</title>
     <!-- Bootstrap Core CSS -->
     <link href={% static 'css/bootstrap.min.css' %} rel="stylesheet" type="text/css">
 
@@ -56,13 +54,13 @@
 						
 						<li><a href="#aboutus">ABOUT</a></li>
 						<li><a href="#services">SERVICES</a></li>
-						<li><a href="#toolutility">TOOL UTILITY</a></li>
-						<li><a href="#improvestrategy">IMPROVE STRATEGY</a></li>
+						<li><a href="#toolutility">UTILITY</a></li>
+						<li><a href="#improvestrategy">STRATEGY</a></li>
 						<li><a href="#contactus">CONTACT</a></li>
 						{% if request.user.is_authenticated %}
 							<li class="active"><a href="/home">HOME</a></li>
 							<li><a href="{% url 'account_logout' %}">LOGOUT</a></li>
-							<li><a href="#">{{ utilisateur.user.username|upper }} POFILE</a></li>
+							<li><a href="{% url 'facebook_auth:edit_profile' %}">{{ utilisateur.user.username|upper }} POFILE</a></li>
 						{% else %}
 							<li><a href="{% url 'account_login' %}">LOGIN</a></li>
 							<li><a href="{% url 'account_signup' %}">SIGNUP</a></li>
@@ -437,17 +435,18 @@
 					<h2>Get in touch</h2>
 					</div>
 					<div class="col-sm-8">
-						<form class="my-form" role="form">
+						<form class="my-form" role="form" action="{% url 'facebook_auth:send_mail' %}" method="POST">
+						{% csrf_token %}
 						  <div class="form-group">
-							<input type="text" class="form-control" id="name" placeholder="Name" required="">
+							<input type="text" class="form-control" name="object" id="object" placeholder="Object" required="">
 						  </div>
 						  <div class="form-group">
-							<input type="email" class="form-control" id="email" placeholder="Email" required="">
+							<input type="email" class="form-control" name="email" id="email" placeholder="Email" required="">
 						  </div>
 						  <div class="form-group">
 							<textarea class="form-control" name="message" id="message" rows="7" cols="25" style="resize:none;" required="required" placeholder="Message"></textarea>
 						  </div>
-						  
+	
 						  <button type="submit" class="btn btn-default btn-block">SEND MESSAGE</button>
 						</form>
 					</div>

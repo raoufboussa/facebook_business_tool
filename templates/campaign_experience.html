@@ -138,13 +138,13 @@
 													</div> 
 													<div class="form-check ">
 													<label class="form-check-label">
-														<input type="radio" class="form-check-input" name="filter" checked value="efficiency">Efficiency(system)
+														<input type="radio" class="form-check-input" name="filter" checked value="efficiency">General
 													</label>
 													</div> 
 												</div>
 												<div class="row">
 													<div class="col-8 float-right">
-														<button type="submit" class="btn btn-primary btn-block" >Get Perfect Parameters</button>
+														<button type="submit" class="btn btn-primary btn-block" >Campaign Experience</button>
 													</div>
 												</div> 
 											</div>
@@ -154,6 +154,11 @@
                         </div>
                 </div>
                 {% if campaigns  %}
+                {% if empty %}
+                    <div class="alert alert-info" role="alert">
+                        Enter at least one paramenter !
+                    </div>
+                {% else %}
                 {% if data %}
                 <div class = "row" id = "experience">
                     {% for ads,cpc,cpp,cpm,ctr,efficiency,counts in result %}
@@ -167,21 +172,38 @@
                                 </div>
                                 <div class="card-body">
                                     <ul class="list-group list-group-flush">
-                                        <li class="list-group-item"> Campaign Objective: <br> 
-                                        <p class="card-text">{{ ads.objective }}</p>
+                                        <li class="list-group-item {% if objectivs_table3 %}bg-Secondary{% endif %}" > Campaign Objective: <br> 
+                                        <p class="card-text" >{{ ads.objective }}
+                                        {% for obj,efficiency in objectivs_table3 %}
+                                            {% if ads.objective == obj  %}
+                                                 <b class="float-right">rank: {{forloop.counter }}/{{objectivs_table3|length}}</b>
+                                            {% endif %}
+                                        {% endfor %}
+                                        </p>
                                         </li>
-                                        <li class="list-group-item"> Campaign Domain: <br> 
-                                        <p class="card-text">{{ads.niche}}</p>
+                                        <li class="list-group-item {% if domains_table3 %}bg-Secondary{% endif %}" > Campaign Domain: <br> 
+                                        <p class="card-text">{{ads.niche}}
+                                        {% for obj,efficiency in domains_table3 %}
+                                            {% if ads.niche == obj  %}
+                                                 <b class="float-right">rank: {{forloop.counter }}/{{domains_table3|length}}</b>
+                                            {% endif %}
+                                        {% endfor %}
+                                        </p>
                                         </li>
                                         <li class="list-group-item"> Campaign Age: <br> 
                                         <p class="card-text">{{ads.age_min}} to {{ads.age_max}}</p>
                                         </li>
-                                        <li class="list-group-item"> Campaign Genders: <br> 
-                                        <p class="card-text">{{ads.genders}}</p>
+                                        <li class="list-group-item {% if genders_table3 %}bg-Secondary{% endif %}"> Campaign Genders: <br> 
+                                        <p class="card-text">{{ads.genders}}
+                                        {% for obj,efficiency in genders_table3 %}
+                                            {% if ads.genders == obj  %}
+                                                 <b class="float-right">rank: {{forloop.counter }}/{{genders_table3|length}}</b>
+                                            {% endif %}
+                                        {% endfor %}
+                                        </p>
                                         </li>
                                         {% if method_filter == "efficiency" %}
-                                   
-                                            <li class="list-group-item"> Campaign CPC: <br>
+                                            <li class="list-group-item "> Campaign CPC: <br>
                                             {% if cpc < 0.4 %}
                                             <p class="card-text" style="color:green">$ {{cpc|stringformat:".3f"}} <i class="fas fa-arrow-up bg-success float-right"></i></p>
                                             {% else %}
@@ -291,12 +313,12 @@
                                             {% if  method_filter == "ctr" %}
                                                 <li class="list-group-item"> Campaign CTR: <br> 
                                                 {% if ctr < 6 %}
-                                                <p class="card-text" style="color:green">% {{ctr|stringformat:".3f"}}</p>
+                                                <p class="card-text" style="color:red">% {{ctr|stringformat:".3f"}}</p>
                                                 {% else %}
                                                     {% if ctr < 10 %} 
                                                         <p class="card-text" style="color:orange">% {{ctr|stringformat:".3f"}}</p>                                                        
                                                     {% else %}                                                        
-                                                        <p class="card-text" style="color:red">% {{ctr|stringformat:".3f"}}</p>
+                                                        <p class="card-text" style="color:green">% {{ctr|stringformat:".3f"}}</p>
                                                     {% endif %}
                                                 {% endif %}
                                                 </li>
@@ -323,26 +345,53 @@
                                         <li class="list-group-item"> Campaign Frequency: <br> 
                                         <p class="card-text">{{ads.frequency}}</p>
                                         </li>
-                                        <li class="list-group-item"> Campaign Location Types: <br> 
+                                        {% comment %} <li class="list-group-item"> Campaign Location Types: <br> 
                                         <p class="card-text">{{ads.location_types}}</p>
+                                        </li> {% endcomment %}
+                                        <li class="list-group-item {% if country_table3 %}bg-Secondary{% endif %}"> Campaign Country: <br> 
+                                        <p class="card-text">{{ads.country}}
+                                        {% for obj,efficiency in country_table3 %}
+                                            {% if ads.country == obj  %}
+                                                 <b class="float-right">rank: {{forloop.counter }}/{{country_table3|length}}</b>
+                                            {% endif %}
+                                        {% endfor %}
+                                        </p>
                                         </li>
-                                        <li class="list-group-item"> Campaign Country: <br> 
-                                        <p class="card-text">{{ads.country}}</p>
+                                        <li class="list-group-item {% if regions_table3 %}bg-Secondary{% endif %}"> Campaign City: <br> 
+                                        <p class="card-text">{{ads.citie}}
+                                        {% for obj,efficiency in regions_table3 %}
+                                            {% if ads.citie == obj  %}
+                                                 <b class="float-right">rank: {{forloop.counter }}/{{regions_table3|length}}</b>
+                                            {% endif %}
+                                        {% endfor %}
+                                        </p>
                                         </li>
-                                        <li class="list-group-item"> Campaign Citie: <br> 
-                                        <p class="card-text">{{ads.citie}}</p>
+                                        <li class="list-group-item {% if devices_table3 %}bg-Secondary{% endif %}"> Campaign Device Platforms: <br> 
+                                        <p class="card-text">{{ads.device_platforms}}
+                                        {% for obj,efficiency in devices_table3 %}
+                                            {% if ads.device_platforms == obj  %}
+                                                 <b class="float-right">rank: {{forloop.counter }}/{{devices_table3|length}}</b>
+                                            {% endif %}
+                                        {% endfor %}
+                                        </p>
                                         </li>
-                                        <li class="list-group-item"> Campaign Region: <br> 
-                                        <p class="card-text">{{ads.region}}</p>
+                                        <li class="list-group-item {% if publisher_platforms_table3 %}bg-Secondary{% endif %}"> Campaign Publisher Platforms: <br> 
+                                        <p class="card-text">{{ads.publisher_platforms}}
+                                        {% for obj,efficiency in publisher_platforms_table3 %}
+                                            {% if ads.publisher_platforms == obj  %}
+                                                 <b class="float-right">rank: {{forloop.counter }}/{{publisher_platforms_table3|length}}</b>
+                                            {% endif %}
+                                        {% endfor %}
+                                        </p>
                                         </li>
-                                        <li class="list-group-item"> Campaign Device Platforms: <br> 
-                                        <p class="card-text">{{ads.device_platforms}}</p>
-                                        </li>
-                                        <li class="list-group-item"> Campaign Publisher Platforms: <br> 
-                                        <p class="card-text">{{ads.publisher_platforms}}</p>
-                                        </li>
-                                        <li class="list-group-item"> Campaign Positions: <br> 
-                                        <p class="card-text">{{ads.positions}}</p>
+                                        <li class="list-group-item {% if positions_table3 %}bg-Secondary{% endif %}"> Campaign Positions: <br> 
+                                        <p class="card-text">{{ads.positions}}
+                                        {% for obj,efficiency in positions_table3 %}
+                                            {% if ads.positions == obj  %}
+                                                 <b class="float-right">rank: {{forloop.counter }}/{{positions_table3|length}}</b>
+                                            {% endif %}
+                                        {% endfor %}
+                                        </p>
                                         </li>
                                     </ul>
                                 </div><!-- /.card-body -->
@@ -351,10 +400,12 @@
                     {% endfor %}
                 </div>
                 {% else %}
-                <div class="alert alert-info" role="alert">
-                    Data is limited ! Try with other Parameters
-                </div>
+                    <div class="alert alert-info" role="alert">
+                        Data is limited ! Try with other Parameters
+                    </div>
                 {% endif %}
+                {% endif %}
+                
                 {% endif %}
             </div>
         </div>

@@ -24,7 +24,7 @@
           <tr>
               <td>{{ads.name}}</td>
               <td>{{campaign.objective}}</td>
-              <td>{{ads.status}}</td>
+              <td>Ended</td>
               <td>{{campaign.start_time}}</td>
               <td>{{campaign.stop_time}}</td>
               <td>{{ads.targeting.age_min}}-{{ads.targeting.age_max}}</td>      
@@ -68,7 +68,13 @@
                   <div class="card">
                     <div class="card-header border-0">
                       <div class="d-flex justify-content-between">
-                        <h3 class="card-title">CPP and CPM of the Ads</h3>
+                        <h3 class="card-title"><i class="far fa-chart-bar"></i> CPP and CPM </h3>
+                      </div>
+                      <div class="card-tools">
+                        <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-minus"></i>
+                        </button>
+                        <button type="button" class="btn btn-tool" data-card-widget="remove"><i class="fas fa-times"></i>
+                        </button>
                       </div>
                     </div>
                     <div class="card-body">
@@ -104,8 +110,14 @@
                 <div class="card">
                   <div class="card-header border-0">
                   <div class="d-flex justify-content-between">
-                    <h3 class="card-title">Reach And Impressions</h3>
+                    <h3 class="card-title"><i class="far fa-chart-bar"></i> Reach And Impressions</h3>
                   </div>
+                    <div class="card-tools">
+                      <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-minus"></i>
+                      </button>
+                      <button type="button" class="btn btn-tool" data-card-widget="remove"><i class="fas fa-times"></i>
+                      </button>
+                    </div>
                   </div>
                   <div class="card-body">
                   <div class="d-flex">
@@ -141,8 +153,14 @@
                   <div class="card">
                     <div class="card-header border-0">
                     <div class="d-flex justify-content-between">
-                      <h3 class="card-title">Cpc of the Ad</h3>
+                      <h3 class="card-title"><i class="far fa-chart-bar"></i> Cpc</h3>
                     </div>
+                    <div class="card-tools">
+                        <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-minus"></i>
+                        </button>
+                        <button type="button" class="btn btn-tool" data-card-widget="remove"><i class="fas fa-times"></i>
+                        </button>
+                      </div>
                     </div>
                     <div class="card-body">
                     <!-- /.d-flex -->
@@ -158,11 +176,43 @@
               </div>
               <div class="row">
                 <div class="col-lg">
+                  <div class="card">
+                    <div class="card-header border-0">
+                    <div class="d-flex justify-content-between">
+                      <h3 class="card-title"><i class="far fa-chart-bar"></i> Spend</h3>
+                    </div>
+                      <div class="card-tools">
+                        <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-minus"></i>
+                        </button>
+                        <button type="button" class="btn btn-tool" data-card-widget="remove"><i class="fas fa-times"></i>
+                        </button>
+                      </div>
+                    </div>
+                    <div class="card-body">
+                    <!-- /.d-flex -->
+
+                    <div class="position-relative mb-4">
+                      <canvas id="negative-feedback" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas>
+                    </div>
+
+                    </div>
+                  </div>
+                  <!-- /.card -->
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-lg">
                 <div class="card bg-gradient-info">
                   <div class="card-header border-0">
                   <div class="d-flex justify-content-between">
-                    <h3 class="card-title">Ctr of the Ad</h3>
+                    <h3 class="card-title"><i class="far fa-chart-bar"></i> Ctr </h3>
                   </div>
+                    <div class="card-tools">
+                      <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-minus"></i>
+                      </button>
+                      <button type="button" class="btn btn-tool" data-card-widget="remove"><i class="fas fa-times"></i>
+                      </button>
+                    </div>
                   </div>
                   <div class="card-body">
                   <!-- /.d-flex -->
@@ -176,6 +226,30 @@
                 <!-- /.card -->
                 </div>
               </div>
+              <div class="row">
+                <div class="col-lg">
+                <div class="card card-primary card-outline">
+                  <div class="card-header">
+                    <h3 class="card-title">
+                      <i class="far fa-chart-bar"></i>
+                      Clicks
+                    </h3>
+
+                    <div class="card-tools">
+                      <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-minus"></i>
+                      </button>
+                      <button type="button" class="btn btn-tool" data-card-widget="remove"><i class="fas fa-times"></i>
+                      </button>
+                    </div>
+                  </div>
+                  <div class="card-body">
+                    <div id="clicks" style="height: 338px;" class="full-width-chart" ></div>
+                  </div>
+                  <!-- /.card-body-->
+                </div>
+                <!-- /.card -->
+              </div>
+            </div>
             </div>
             <div class="modal-footer">
                 <button id="close-modal" type="button" class="btn btn-primary" data-dismiss="modal">Close</button>

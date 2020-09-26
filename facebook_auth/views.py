@@ -15,9 +15,11 @@ from .models import (
     ,Experience_Campaign)
 from rest_framework.views import APIView
 from rest_framework.response import Response
-import facebook,json as JSON,requests,time,os,csv
+import facebook,json as JSON,requests,time,os,csv,xlsxwriter,xlwt
 from datetime import datetime
 from math import ceil
+from django.core.mail import send_mail, BadHeaderError
+from django.views.decorators.csrf import csrf_exempt
 import datetime
 from django.http import HttpResponse,JsonResponse,HttpResponseRedirect
 from facebook_business.api import FacebookAdsApi
@@ -42,16 +44,35 @@ from allauth.socialaccount.models import (
     SocialToken
     )
 
-def login_page(request):
+def welcome_page(request):
     # if(request.user):
     #     utilisateur,created = UserProfile.objects.get_or_create(user = request.user)
     #     utilisateur.save()
 
     return render(request,'welcome_page.html',locals())
+@csrf_exempt
+def send_mail(request):
+    if request.method == 'POST':
+        # name = request.POST['name']
+        message = request.POST['message']
+        objectd = request.POST['object']
+        email = request.POST['email']
+        to = "rboussa16@gmail.com"
+        try:
+            send_mail(objectd, message, email,[to])
+            messages.success(request, _('Success! Thank you for your message'))
+        except BadHeaderError:
+            return HttpResponse('Invalid header found.')
+        return render(request,'welcome_page.html',locals())
+    else:
+        messages.error(request, _('THE POST FORM IS WRONG!'))
+        return render(request,'welcome_page.html',locals())
+
 
 @login_required
 @transaction.atomic
 def edit_profile(request):
+    
     if request.method == 'POST':
         user_form = UserForm(request.POST, instance=request.user)
         profile_form = Edit_Profile(request.POST, instance=request.user.userprofile)
@@ -69,16 +90,16 @@ def edit_profile(request):
         'user_form': user_form,
         'profile_form': profile_form
     })
-            
-            
+
     return render(request,'upload_img.html', locals())
+
 def csv_export(request):
     utilisateur,created = UserProfile.objects.get_or_create(user = request.user)
     utilisateur.save()
     if request.method == 'POST':
         form = Export_Form(request.POST)
         if (form.is_valid()):
-            model = request.POST['model']
+            model = request.POST['model_first']
             response = HttpResponse(content_type='text/csv')
             if (model =="Campaigns"):
                 response['Content-Disposition'] = 'attachment;filename="campaigns.csv"'
@@ -92,11 +113,11 @@ def csv_export(request):
             if (model =="Pages"):
                 response['Content-Disposition'] = 'attachment;filename="pages.csv"'
                 writer = csv.writer(response)
-                writer.writerow(["Access_Token" ,"Category","Cover","Phone","Unseen_Message_Count",
+                writer.writerow(["Page_Name","Access_Token" ,"Category","Cover","Phone","Unseen_Message_Count",
                 "Unread_Message_Count","Rating_Count","Unread_Notif_Count","Talking_About_Count","New_Like_Count","Fan_Count","Is_Owned",
                 "Name_With_Location_Descriptor","Offer_Eligible" ,"Overall_Star_Rating" , "Website","Supports_Instant_Articles","About","Verification_Status"
                 ,"Last_Update"])
-                objects = Account_Page.objects.all().values_list("access_token" ,"category","cover","phone","unseen_message_count",
+                objects = Account_Page.objects.all().values_list("name","access_token" ,"category","cover","phone","unseen_message_count",
                 "unread_message_count","rating_count","unread_notif_count","talking_about_count","new_like_count","fan_count","is_owned",
                 "name_with_location_descriptor","offer_eligible" ,"overall_star_rating" , "website","supports_instant_articles","about","verification_status"
                 ,"last_update" )
@@ -115,12 +136,108 @@ def csv_export(request):
         form = Export_Form()
         return render(request, 'export_csv.html',locals())
 
+def report(request):
+    utilisateur,created = UserProfile.objects.get_or_create(user = request.user)
+    utilisateur.save()
+
+    return render(request,"report.html",locals())
+
+
+def excel_export(request):
+    utilisateur,created = UserProfile.objects.get_or_create(user = request.user)
+    utilisateur.save()
+    if request.method == 'POST':
+        form = Export_Form(request.POST)
+        if (form.is_valid()):
+            model = request.POST['model_second']
+            response = HttpResponse(content_type='application/ms-excel')
+
+
+            if (model =="Campaigns"):
+                response['Content-Disposition'] = 'attachment; filename="Campaigns.xls"'
+                wb = xlwt.Workbook(encoding='utf-8')
+                ws = wb.add_sheet('Campaigns')
+                # Sheet header, first row
+                row_num = 0
+                font_style = xlwt.XFStyle()
+                font_style.font.bold = True
+                columns = ["Name" ,"Objective","Niche","Age_max","Age_min","Genders","Created_Time",
+                "CPC","CPM","CPP","Clicks","Frequency","CTR","Location_Types","Country","Citie","Region",
+                "Device_Platforms","Publisher_Platforms","Positions","Efficiency"]
+                for col_num in range(len(columns)):
+                    ws.write(row_num, col_num, columns[col_num], font_style)
+                # Sheet body, remaining rows
+                font_style = xlwt.XFStyle()
+                rows = Experience_Campaign.objects.all().values_list("name" ,"objective","niche","age_max","age_min","genders","created_time",
+                "cpc","cpm","cpp","clicks","frequency","ctr","location_types","country","citie","region",
+                "device_platforms","publisher_platforms","positions","efficiency")
+                for row in rows:
+                    row_num += 1
+                    for col_num in range(len(row)):
+                        ws.write(row_num, col_num, row[col_num], font_style)
+
+                wb.save(response)
+                return response
+            if (model =="Pages"):
+                response['Content-Disposition'] = 'attachment; filename="Pages.xls"'
+                wb = xlwt.Workbook(encoding='utf-8')
+                ws = wb.add_sheet('Pages')
+                # Sheet header, first row
+                row_num = 0
+                font_style = xlwt.XFStyle()
+                font_style.font.bold = True
+                columns = ["Page_Name","Access_Token" ,"Category","Cover","Phone","Unseen_Message_Count",
+                    "Unread_Message_Count","Rating_Count","Unread_Notif_Count","Talking_About_Count","New_Like_Count","Fan_Count","Is_Owned",
+                    "Name_With_Location_Descriptor","Offer_Eligible" ,"Overall_Star_Rating" , "Website","Supports_Instant_Articles","About","Verification_Status"
+                    ,"Last_Update"]
+                for col_num in range(len(columns)):
+                    ws.write(row_num, col_num, columns[col_num], font_style)
+                # Sheet body, remaining rows
+                font_style = xlwt.XFStyle()
+                rows = Account_Page.objects.all().values_list("name","access_token" ,"category","cover","phone","unseen_message_count",
+                    "unread_message_count","rating_count","unread_notif_count","talking_about_count","new_like_count","fan_count","is_owned",
+                    "name_with_location_descriptor","offer_eligible" ,"overall_star_rating" , "website","supports_instant_articles","about","verification_status"
+                    ,"last_update")
+                for row in rows:
+                    row_num += 1
+                    for col_num in range(len(row)):
+                        ws.write(row_num, col_num, row[col_num], font_style)
+
+                wb.save(response)
+                return response
+            if (model =="Ad_accounts"):
+                response['Content-Disposition'] = 'attachment; filename="Ad_accounts.xls"'
+                wb = xlwt.Workbook(encoding='utf-8')
+                ws = wb.add_sheet('Ad_accounts')
+                # Sheet header, first row
+                row_num = 0
+                font_style = xlwt.XFStyle()
+                font_style.font.bold = True
+                columns = ["Name" ,"Account_Status","Created_time","Owner_Id","Age","Amount_Spent","Attribution_Spec","Balance",
+                "Can_Create_Brand_Lift_Study","Capabilities","Last_Update","Last_Update_Campaigns"]
+                for col_num in range(len(columns)):
+                    ws.write(row_num, col_num, columns[col_num], font_style)
+                # Sheet body, remaining rows
+                font_style = xlwt.XFStyle()
+                rows = Ad_Account.objects.all().values_list("name" ,"account_status","created_time","owner_id","age",
+                "amount_spent","attribution_spec","balance","can_create_brand_lift_study","capabilities","last_update","last_update_campaigns")
+                for row in rows:
+                    row_num += 1
+                    for col_num in range(len(row)):
+                        ws.write(row_num, col_num, row[col_num], font_style)
+
+                wb.save(response)
+                return response
+    else:
+        form = Export_Form()
+        return render(request, 'export_csv.html',locals())
+
 def about_tool(request):
     utilisateur,created = UserProfile.objects.get_or_create(user = request.user)
     utilisateur.save()
 
     return render(request,"about_tool.html",locals())
-        
+
 
 @login_required
 def get_data(request):
@@ -128,7 +245,7 @@ def get_data(request):
     my_access_token = str(SocialToken.objects.filter(account__user=cef, account__provider='facebook')[0])
     my_social_app = SocialApp.objects.filter(provider='facebook',name="FacebookApp")[0]
     my_app_id = str(my_social_app.client_id)
-    my_app_secret = str(my_social_app.secret) 
+    my_app_secret = str(my_social_app.secret)
     FacebookAdsApi.init(my_app_id, my_app_secret, my_access_token)
     me = AdUser(fbid='me')
 
@@ -178,7 +295,7 @@ def get_data(request):
     for account in my_pages:
         page,created = Account_Page.objects.get_or_create(page_id=str(account['id']))
         namesAndAccIds.append((account['name'],account['id'],account['access_token']))
-        cover,created = Cover_Photo.objects.get_or_create(id = account['cover']['id'])       
+        cover,created = Cover_Photo.objects.get_or_create(id = account['cover']['id'])
         if ('cover' in account):
             cover.id = account['cover']['id']
             cover.page_name = account['name']
@@ -187,7 +304,7 @@ def get_data(request):
             cover.source = account['cover']['source']
             cover.save()
             page.cover_photo = cover
-            
+
         page.name = account['name']
         page.page_id = account['id']
         if ('talking_about_count' in account):
@@ -253,7 +370,7 @@ def get_data(request):
                 ad_account_insight.clicks = insights['clicks']
                 ad_account_insight.account_name = insights['account_name']
                 ad_account_insight.save()
-                
+
                 for action_pool in insights["actions"]:
                     action,created = Action.objects.get_or_create(action_id = adaccount['name'],action_type = action_pool['action_type'])
                     action.action_type = action_pool['action_type']
@@ -261,7 +378,7 @@ def get_data(request):
                     action.value = action_pool['value']
                     action.save()
                     ad_account_insight.actions.add(action)
-                
+
                 for cost_per_action_type_pool in insights["cost_per_action_type"]:
                     cost_per_action_type,created = Cost_Per_Action_Type.objects.get_or_create(cost_per_action_type_id=(adaccount['name']+"/"+cost_per_action_type_pool['action_type']+"/"+cost_per_action_type_pool['value']))
                     cost_per_action_type.action_type = cost_per_action_type_pool['action_type']
@@ -270,10 +387,10 @@ def get_data(request):
                     ad_account_insight.cost_per_action_type.add(cost_per_action_type)
                 if ('cost_per_inline_link_click' in insights):
                     ad_account_insight.cost_per_inline_link_click = insights['cost_per_inline_link_click']
-                
+
                 if ('cost_per_inline_post_engagement' in insights):
                     ad_account_insight.cost_per_inline_post_engagement = insights['cost_per_inline_post_engagement']
-                
+
                 if ('cost_per_outbound_click' in insights):
                     for cost_per_outbound_click_pool in insights["cost_per_outbound_click"]:
                         cost_per_outbound_click,created = Cost_Per_Outbound_Click.objects.get_or_create(cost_per_outbound_click_id=adaccount['name'],action_type=cost_per_outbound_click_pool['action_type'])
@@ -297,7 +414,7 @@ def get_data(request):
 
                 if ('cost_per_unique_inline_link_click' in insights):
                     ad_account_insight.cost_per_unique_inline_link_click = insights['cost_per_unique_inline_link_click']
-                
+
                 if ('cost_per_unique_outbound_click' in insights):
                     for cost_per_unique_outbound_click_pool in insights["cost_per_unique_outbound_click"]:
                         cost_per_unique_outbound_click,created = Cost_Per_Unique_Outbound_Click.objects.get_or_create(cost_per_unique_outbound_click_id=adaccount['name'],action_type=cost_per_unique_outbound_click_pool['action_type'])
@@ -306,7 +423,7 @@ def get_data(request):
                         cost_per_unique_outbound_click.value = cost_per_unique_outbound_click_pool['value']
                         cost_per_unique_outbound_click.save()
                         ad_account_insight.cost_per_unique_outbound_click.add(cost_per_unique_outbound_click)
-                
+
                 if ('cost_per_thruplay' in insights):
                     for cost_per_thruplay_pool in insights["cost_per_thruplay"]:
                         cost_per_thruplay,created = Cost_Per_Thruplay.objects.get_or_create(cost_per_thruplay_id=(adaccount['name']+"/"+cost_per_thruplay_pool['action_type']+"/"+cost_per_thruplay_pool['value']))
@@ -334,7 +451,7 @@ def get_data(request):
                 adAccount.insights = ad_account_insight
                 adAccount.save()
             ####################################################### fin de traitement de insights #########################################################
-        else: 
+        else:
             adAccount.save()
     ########################################################### get insights pour chaque page facebook ##########################################################
     for page in namesAndAccIds:
@@ -345,40 +462,46 @@ def get_data(request):
         api = API.objects.filter(name="FacebookGraph",provider="Facebook")
         queryset = Metric.objects.filter(API=api[0])
         for metric in queryset:
-            e = time.time() #page_tab_views_login_top&since='+s+'&until='+e+"&period=day
-            s = time.time()-(90*24*3600) #on retranche le nombe de seconde dans un mois 
-            e,s=str(ceil(e)),str(ceil(s))
-            returnedAPIData = graphPage.get_connections(id=pageId, connection_name='insights?metric='+metric.queryName+'&since='+s+'&until='+e+'&period=day')
-            print(metric.queryName)
-            for element in returnedAPIData['data']:
-                page_insight,created = Page_Insight.objects.get_or_create(page_insights_id=element['id'])
-                page_insight.page_insights_id = element['id']
-                page_insight.name = element['name']
-                page_insight.period = element['period'] 
-                page_insight.title = element['title']
-                page_insight.description = element  ['description']
-                for value in element['values']:
-                    insight_value,created = Insights_Value.objects.get_or_create(insight_name=element['name'],end_time=value['end_time'],insights_value_id=pageId)
-                    insight_value.insights_value_id = pageId
-                    insight_value.value = str(value['value'])
-                    insight_value.end_time = value['end_time']
-                    insight_value.insight_name = element['name']
-                    insight_value.save()
-                    page_insight.values.add(insight_value)
-            page_insight.save()
-            page.insights.add(page_insight)
+            try:
+                e = time.time() #page_tab_views_login_top&since='+s+'&until='+e+"&period=day
+                s = time.time()-(90*24*3600) #on retranche le nombe de seconde dans un mois
+                e,s=str(ceil(e)),str(ceil(s))
+                returnedAPIData = graphPage.get_connections(id=pageId, connection_name='insights?metric='+metric.queryName+'&since='+s+'&until='+e+'&period=day')
+                print(metric.queryName)
+                for element in returnedAPIData['data']:
+                    page_insight,created = Page_Insight.objects.get_or_create(page_insights_id=element['id'])
+                    page_insight.page_insights_id = element['id']
+                    page_insight.name = element['name']
+                    page_insight.period = element['period']
+                    page_insight.title = element['title']
+                    page_insight.description = element  ['description']
+                    for value in element['values']:
+                        insight_value,created = Insights_Value.objects.get_or_create(insight_name=element['name'],end_time=value['end_time'],insights_value_id=pageId)
+                        insight_value.insights_value_id = pageId
+                        insight_value.value = str(value['value'])
+                        insight_value.end_time = value['end_time']
+                        insight_value.insight_name = element['name']
+                        insight_value.save()
+                        page_insight.values.add(insight_value)
+                page_insight.save()
+                page.insights.add(page_insight)
+            except:
+                pass
 
     ########################################################### get insights pour chaque adaccount facebook ##########################################################
     for adacnt in namesAndAdaccIDs:
         adActId = str(adacnt[1])
         print(adacnt[0])
         print("getting campaigns "+adActId)
-        adact = AdAccount(adActId)
+        try:
+            adact = AdAccount(adActId)
 
         ############################################################################## get campaigns #################################################################################
         
-        campaigns = adact.get_campaigns(fields=(AdCampaign.Field.status,AdCampaign.Field.account_id,AdCampaign.Field.id,AdCampaign.Field.name,AdCampaign.Field.objective,
-        AdCampaign.Field.start_time,AdCampaign.Field.stop_time,AdCampaign.Field.updated_time,AdCampaign.Field.created_time,AdCampaign.Field.lifetime_budget))
+            campaigns = adact.get_campaigns(fields=(AdCampaign.Field.status,AdCampaign.Field.account_id,AdCampaign.Field.id,AdCampaign.Field.name,AdCampaign.Field.objective,
+            AdCampaign.Field.start_time,AdCampaign.Field.stop_time,AdCampaign.Field.updated_time,AdCampaign.Field.created_time,AdCampaign.Field.lifetime_budget))
+        
+        
 
         ############################################################################## get adsets #################################################################################
 
@@ -387,87 +510,89 @@ def get_data(request):
 
         ############################################################################## get ads #################################################################################
 
-        ads = adact.get_ads(fields=(Ad.Field.account_id,Ad.Field.campaign_id,Ad.Field.adset_id,Ad.Field.id,Ad.Field.engagement_audience,Ad.Field.created_time,Ad.Field.updated_time,
-        Ad.Field.status,Ad.Field.name,Ad.Field.targeting))
+            ads = adact.get_ads(fields=(Ad.Field.account_id,Ad.Field.campaign_id,Ad.Field.adset_id,Ad.Field.id,Ad.Field.engagement_audience,Ad.Field.created_time,Ad.Field.updated_time,
+            Ad.Field.status,Ad.Field.name,Ad.Field.targeting))
 
-        #-----------------------------------------------Saving Campaign------------------------------------------------# 
+            #-----------------------------------------------Saving Campaign------------------------------------------------#
 
-        adaccount = Ad_Account.objects.get(adaccount_id=adActId)# get the Adaccount where the Id equal to adActId
+            adaccount = Ad_Account.objects.get(adaccount_id=adActId)# get the Adaccount where the Id equal to adActId
 
-        for c in ads:
-            ad = Ads.objects.filter(ad_id=c["id"])                                          
-            if ad.exists():
-                pass
-            else:
-                ad_targeting = Ad_Targeting.objects.create()
-                ad_targeting.age_max = c["targeting"]["age_max"] 
-                ad_targeting.age_min = c["targeting"]["age_min"]
-                if ("genders" in c["targeting"]):
-                    ad_targeting.genders = c["targeting"]["genders"] 
+            for c in ads:
+                ad = Ads.objects.filter(ad_id=c["id"])
+                if ad.exists():
+                    pass
+                else:
+                    ad_targeting = Ad_Targeting.objects.create()
+                    ad_targeting.age_max = c["targeting"]["age_max"]
+                    ad_targeting.age_min = c["targeting"]["age_min"]
+                    if ("genders" in c["targeting"]):
+                        ad_targeting.genders = c["targeting"]["genders"]
 
-                if ("geo_locations" in c["targeting"] ) :
-                    if ("countries" in c["targeting"]["geo_locations"]) :
-                        ad_targeting.location_countries = c["targeting"]["geo_locations"]["countries"]
-                    if ("location_types" in c["targeting"]["geo_locations"]) :
-                        ad_targeting.location_types = c["targeting"]["geo_locations"]["location_types"]
+                    if ("geo_locations" in c["targeting"] ) :
+                        if ("countries" in c["targeting"]["geo_locations"]) :
+                            ad_targeting.location_countries = c["targeting"]["geo_locations"]["countries"]
+                        if ("location_types" in c["targeting"]["geo_locations"]) :
+                            ad_targeting.location_types = c["targeting"]["geo_locations"]["location_types"]
 
-                if ("publisher_platforms" in c["targeting"]) : 
-                    ad_targeting.publisher_platforms = c["targeting"]["publisher_platforms"]
-                    
-                if ("facebook_positions" in c["targeting"]):    
-                    ad_targeting.facebook_positions = c["targeting"]["facebook_positions"]
+                    if ("publisher_platforms" in c["targeting"]) :
+                        ad_targeting.publisher_platforms = c["targeting"]["publisher_platforms"]
 
-                if ("device_platforms" in c["targeting"]):
-                    ad_targeting.device_platforms = c["targeting"]["device_platforms"]
+                    if ("facebook_positions" in c["targeting"]):
+                        ad_targeting.facebook_positions = c["targeting"]["facebook_positions"]
 
-                if ("instagram_positions" in c["targeting"]):    
-                    ad_targeting.instagram_positions = c["targeting"]["instagram_positions"]
-                
-                ad,create = Ads.objects.get_or_create(ad_id=c["id"])
-                ad.name = c["name"]
-                ad.adset_id = c["adset_id"]
-                ad.campaign_id = c["campaign_id"]
-                ad.account_id = c["account_id"]
-                if ("created_time" in c ):
-                    ad.created_time = c["created_time"]
-                if ("updated_time" in c ):
-                    ad.updated_time = c["updated_time"]
-                ad.status = c["status"]
-                ad_targeting.save()
-                ad.targeting = ad_targeting
-                ad.save()
+                    if ("device_platforms" in c["targeting"]):
+                        ad_targeting.device_platforms = c["targeting"]["device_platforms"]
 
-        for c in campaigns:
-            campaign = Campaign.objects.filter(campaign_id=c["id"])
-            if campaign.exists():
-                pass
-            else:
-                campaign = Campaign.objects.create(campaign_id = c["id"])
-                campaign.name = c["name"]
-                campaign.account_id = c["account_id"]
-                campaign.objective = c["objective"]
-                if ("start_time" in c ):
-                    campaign.start_time = c["start_time"]
-                campaign.status = c["status"]
-                if ("stop_time" in c ):
-                    campaign.stop_time = c["stop_time"]
-                if ("updated_time" in c ):
-                    campaign.updated_time = c["updated_time"]
-                if ('lifetime_budget' in c):
-                    campaign.lifetime_budget = c["lifetime_budget"]
+                    if ("instagram_positions" in c["targeting"]):
+                        ad_targeting.instagram_positions = c["targeting"]["instagram_positions"]
 
-                ads = Ads.objects.filter(campaign_id=c["id"])
-                for ad in ads:
-                    campaign.ads.add(ad)
-                campaign.save()
-               
-        #-----------------------------------------------Saving Campaign------------------------------------------------# 
-        print("saving campaigns into adaccount")
-        campaigns = Campaign.objects.filter(account_id=adActId)
-        print(campaigns)
-        for campaign in campaigns:
-            adaccount.campaigns.add(campaign)
-            adaccount.save()
+                    ad,create = Ads.objects.get_or_create(ad_id=c["id"])
+                    ad.name = c["name"]
+                    ad.adset_id = c["adset_id"]
+                    ad.campaign_id = c["campaign_id"]
+                    ad.account_id = c["account_id"]
+                    if ("created_time" in c ):
+                        ad.created_time = c["created_time"]
+                    if ("updated_time" in c ):
+                        ad.updated_time = c["updated_time"]
+                    ad.status = c["status"]
+                    ad_targeting.save()
+                    ad.targeting = ad_targeting
+                    ad.save()
+
+            for c in campaigns:
+                campaign = Campaign.objects.filter(campaign_id=c["id"])
+                if campaign.exists():
+                    pass
+                else:
+                    campaign = Campaign.objects.create(campaign_id = c["id"])
+                    campaign.name = c["name"]
+                    campaign.account_id = c["account_id"]
+                    campaign.objective = c["objective"]
+                    if ("start_time" in c ):
+                        campaign.start_time = c["start_time"]
+                    campaign.status = c["status"]
+                    if ("stop_time" in c ):
+                        campaign.stop_time = c["stop_time"]
+                    if ("updated_time" in c ):
+                        campaign.updated_time = c["updated_time"]
+                    if ('lifetime_budget' in c):
+                        campaign.lifetime_budget = c["lifetime_budget"]
+
+                    ads = Ads.objects.filter(campaign_id=c["id"])
+                    for ad in ads:
+                        campaign.ads.add(ad)
+                    campaign.save()
+
+            #-----------------------------------------------Saving Campaign------------------------------------------------#
+            print("saving campaigns into adaccount")
+            campaigns = Campaign.objects.filter(account_id=adActId)
+            print(campaigns)
+            for campaign in campaigns:
+                adaccount.campaigns.add(campaign)
+                adaccount.save()
+        except:
+            pass
 
     return redirect('facebook_auth:home')
 
@@ -486,77 +611,83 @@ def get_one_page_insight(request):
     my_access_token = str(SocialToken.objects.filter(account__user=cef, account__provider='facebook')[0])
     my_social_app = SocialApp.objects.filter(provider='facebook',name="FacebookApp")[0]
     my_app_id = str(my_social_app.client_id)
-    my_app_secret = str(my_social_app.secret) 
+    my_app_secret = str(my_social_app.secret)
     FacebookAdsApi.init(my_app_id, my_app_secret, my_access_token)
     me = AdUser(fbid='me')
     for page in pages:
-        pageId = page.page_id
-        print(page.name)
-        access_token = page.access_token
-        graphPage = facebook.GraphAPI(access_token=access_token,version="2.9")
-        api = API.objects.filter(name="FacebookGraph",provider="Facebook")
-        queryset = Metric.objects.filter(API=api[0])
-        for metric in queryset:
-            e = time.time() #page_tab_views_login_top&since='+s+'&until='+e+"&period=day
-            s = time.time()-(90*24*3600) #on retranche le nombe de seconde dans un mois 
-            e,s=str(ceil(e)),str(ceil(s))
-            returnedAPIData = graphPage.get_connections(id=pageId, connection_name='insights?metric='+metric.queryName+'&since='+s+'&until='+e+'&period=day')
-            print(metric.queryName)
-            for element in returnedAPIData['data']:
-                page_insight,created = Page_Insight.objects.get_or_create(page_insights_id=element['id'])
-                page_insight.page_insights_id = element['id']
-                page_insight.name = element['name']
-                page_insight.period = element['period'] 
-                page_insight.title = element['title']
-                page_insight.description = element  ['description']
-                for value in element['values']:
-                    insight_value,created = Insights_Value.objects.get_or_create(insight_name=element['name'],end_time=value['end_time'],insights_value_id=pageId)
-                    insight_value.insights_value_id = pageId
-                    insight_value.value = str(value['value'])
-                    insight_value.end_time = value['end_time']
-                    insight_value.insight_name = element['name']
-                    insight_value.save()
-                    page_insight.values.add(insight_value)
-            page_insight.save()
-            page.insights.add(page_insight)
-    
+        try:
+            pageId = page.page_id
+            print(page.name)
+            access_token = page.access_token
+            graphPage = facebook.GraphAPI(access_token=access_token,version="2.9")
+            api = API.objects.filter(name="FacebookGraph",provider="Facebook")
+            queryset = Metric.objects.filter(API=api[0])
+            for metric in queryset:
+                e = time.time() #page_tab_views_login_top&since='+s+'&until='+e+"&period=day
+                s = time.time()-(90*24*3600) #on retranche le nombe de seconde dans un mois
+                e,s=str(ceil(e)),str(ceil(s))
+                returnedAPIData = graphPage.get_connections(id=pageId, connection_name='insights?metric='+metric.queryName+'&since='+s+'&until='+e+'&period=day')
+                print(metric.queryName)
+                for element in returnedAPIData['data']:
+                    page_insight,created = Page_Insight.objects.get_or_create(page_insights_id=element['id'])
+                    page_insight.page_insights_id = element['id']
+                    page_insight.name = element['name']
+                    page_insight.period = element['period']
+                    page_insight.title = element['title']
+                    page_insight.description = element  ['description']
+                    for value in element['values']:
+                        insight_value,created = Insights_Value.objects.get_or_create(insight_name=element['name'],end_time=value['end_time'],insights_value_id=pageId)
+                        insight_value.insights_value_id = pageId
+                        insight_value.value = str(value['value'])
+                        insight_value.end_time = value['end_time']
+                        insight_value.insight_name = element['name']
+                        insight_value.save()
+                        page_insight.values.add(insight_value)
+                page_insight.save()
+                page.insights.add(page_insight)
+        except:
+            pass
+
     for page in pages:
-        pageId = page.page_id
-        access_token = page.access_token
-        posts = Page(pageId).get_posts(fields=[PagePost.Field.actions,PagePost.Field.message,PagePost.Field.message_tags,PagePost.Field.created_time,
-        PagePost.Field.is_instagram_eligible,PagePost.Field.comments_mirroring_domain,PagePost.Field.is_hidden,PagePost.Field.is_popular,
-        PagePost.Field.shares])
-        
-        for post in posts:
-            # try:
-            #     page_post = Post.objects.get(post_id=post["id"])
-            # except:
-            page_post,created = Post.objects.get_or_create(post_id=post["id"])
-            if ("message" in post):
-                page_post.message = post["message"]
-            if ("message_tags" in post):
-                page_post.message_tags = post["message_tags"]
-            if ("created_time" in post):
-                page_post.created_time = post["created_time"]
-            if ("shares" in post):
-                page_post.shares = int(post["shares"]["count"])
-            if ("is_instagram_eligible" in post):
-                page_post.is_instagram_eligible = post["is_instagram_eligible"]
-            if ("comments_mirroring_domain" in post):
-                page_post.comments_mirroring_domain = post["comments_mirroring_domain"]
-            if ("is_hidden" in post):
-                page_post.is_hidden = post["is_hidden"]
-            if ("is_popular" in post):
-                page_post.is_popular = post["is_popular"]
-            for action in post["actions"]:
-                page_post.link = action["link"]
-            page_post.save()
-            page.posts.add(page_post)
+        try:
+            pageId = page.page_id
+            access_token = page.access_token
+            posts = Page(pageId).get_posts(fields=[PagePost.Field.actions,PagePost.Field.message,PagePost.Field.message_tags,PagePost.Field.created_time,
+            PagePost.Field.is_instagram_eligible,PagePost.Field.comments_mirroring_domain,PagePost.Field.is_hidden,PagePost.Field.is_popular,
+            PagePost.Field.shares])
 
-        page.save() 
+            for post in posts:
+                # try:
+                #     page_post = Post.objects.get(post_id=post["id"])
+                # except:
+                page_post,created = Post.objects.get_or_create(post_id=post["id"])
+                if ("message" in post):
+                    page_post.message = post["message"]
+                if ("message_tags" in post):
+                    page_post.message_tags = post["message_tags"]
+                if ("created_time" in post):
+                    page_post.created_time = post["created_time"]
+                if ("shares" in post):
+                    page_post.shares = int(post["shares"]["count"])
+                if ("is_instagram_eligible" in post):
+                    page_post.is_instagram_eligible = post["is_instagram_eligible"]
+                if ("comments_mirroring_domain" in post):
+                    page_post.comments_mirroring_domain = post["comments_mirroring_domain"]
+                if ("is_hidden" in post):
+                    page_post.is_hidden = post["is_hidden"]
+                if ("is_popular" in post):
+                    page_post.is_popular = post["is_popular"]
+                for action in post["actions"]:
+                    page_post.link = action["link"]
+                page_post.save()
+                page.posts.add(page_post)
+
+            page.save()
+        except:
+            pass
 
 
-    
+
     return redirect("facebook_auth:synchronous")
 
 
@@ -584,102 +715,104 @@ def get_one_adaccount_insight(request):
     my_app_secret = str(my_social_app.secret)
     FacebookAdsApi.init(my_app_id, my_app_secret, my_access_token)
     for adaccount in adaccounts:
-        adActId = adaccount.adaccount_id
-        print("getting campaigns inside report view "+adActId)
-        adact = AdAccount(adActId)
+        try:
+            adActId = adaccount.adaccount_id
+            print("getting campaigns inside report view "+adActId)
+            adact = AdAccount(adActId)
 
-        ############################################################################## get campaigns #################################################################################
-        
-        campaigns = adact.get_campaigns(fields=(AdCampaign.Field.status,AdCampaign.Field.account_id,AdCampaign.Field.id,AdCampaign.Field.name,AdCampaign.Field.objective,
-        AdCampaign.Field.start_time,AdCampaign.Field.stop_time,AdCampaign.Field.updated_time,AdCampaign.Field.created_time,AdCampaign.Field.lifetime_budget))
+            ############################################################################## get campaigns #################################################################################
 
-        ############################################################################## get adsets #################################################################################
+            campaigns = adact.get_campaigns(fields=(AdCampaign.Field.status,AdCampaign.Field.account_id,AdCampaign.Field.id,AdCampaign.Field.name,AdCampaign.Field.objective,
+            AdCampaign.Field.start_time,AdCampaign.Field.stop_time,AdCampaign.Field.updated_time,AdCampaign.Field.created_time,AdCampaign.Field.lifetime_budget))
 
-        # adsets = adact.get_ad_sets(fields=(AdSet.Field.campaign_id,AdSet.Field.account_id,AdSet.Field.id,AdSet.Field.name,AdSet.Field.targeting,AdSet.Field.start_time,AdSet.Field.end_time,AdSet.Field.time_stop
-        # ,AdSet.Field.status,AdSet.Field.lifetime_budget,AdSet.Field.optimization_goal))
+            ############################################################################## get adsets #################################################################################
 
-        ############################################################################## get ads #################################################################################
+            # adsets = adact.get_ad_sets(fields=(AdSet.Field.campaign_id,AdSet.Field.account_id,AdSet.Field.id,AdSet.Field.name,AdSet.Field.targeting,AdSet.Field.start_time,AdSet.Field.end_time,AdSet.Field.time_stop
+            # ,AdSet.Field.status,AdSet.Field.lifetime_budget,AdSet.Field.optimization_goal))
 
-        ads = adact.get_ads(fields=(Ad.Field.account_id,Ad.Field.campaign_id,Ad.Field.adset_id,Ad.Field.id,Ad.Field.engagement_audience,Ad.Field.created_time,Ad.Field.updated_time,
-        Ad.Field.status,Ad.Field.name,Ad.Field.targeting))
+            ############################################################################## get ads #################################################################################
+
+            ads = adact.get_ads(fields=(Ad.Field.account_id,Ad.Field.campaign_id,Ad.Field.adset_id,Ad.Field.id,Ad.Field.engagement_audience,Ad.Field.created_time,Ad.Field.updated_time,
+            Ad.Field.status,Ad.Field.name,Ad.Field.targeting))
 
 
-        #-----------------------------------------------Saving Campaign------------------------------------------------#
+            #-----------------------------------------------Saving Campaign------------------------------------------------#
 
-        for c in ads:
-            ad = Ads.objects.filter(ad_id=c["id"])                                          
-            if ad.exists():
-                pass
-            else:
-                ad_targeting = Ad_Targeting.objects.create()
-                ad_targeting.age_max = c["targeting"]["age_max"] 
-                ad_targeting.age_min = c["targeting"]["age_min"]
-                if ("genders" in c["targeting"]):
-                    ad_targeting.genders = c["targeting"]["genders"] 
+            for c in ads:
+                ad = Ads.objects.filter(ad_id=c["id"])
+                if ad.exists():
+                    pass
+                else:
+                    ad_targeting = Ad_Targeting.objects.create()
+                    ad_targeting.age_max = c["targeting"]["age_max"]
+                    ad_targeting.age_min = c["targeting"]["age_min"]
+                    if ("genders" in c["targeting"]):
+                        ad_targeting.genders = c["targeting"]["genders"]
 
-                if ("geo_locations" in c["targeting"] ) :
-                    if ("countries" in c["targeting"]["geo_locations"]) :
-                        ad_targeting.location_countries = c["targeting"]["geo_locations"]["countries"]
-                    if ("location_types" in c["targeting"]["geo_locations"]) :
-                        ad_targeting.location_types = c["targeting"]["geo_locations"]["location_types"]
+                    if ("geo_locations" in c["targeting"] ) :
+                        if ("countries" in c["targeting"]["geo_locations"]) :
+                            ad_targeting.location_countries = c["targeting"]["geo_locations"]["countries"]
+                        if ("location_types" in c["targeting"]["geo_locations"]) :
+                            ad_targeting.location_types = c["targeting"]["geo_locations"]["location_types"]
 
-                if ("publisher_platforms" in c["targeting"]) : 
-                    ad_targeting.publisher_platforms = c["targeting"]["publisher_platforms"]
-                    
-                if ("facebook_positions" in c["targeting"]):    
-                    ad_targeting.facebook_positions = c["targeting"]["facebook_positions"]
+                    if ("publisher_platforms" in c["targeting"]) :
+                        ad_targeting.publisher_platforms = c["targeting"]["publisher_platforms"]
 
-                if ("device_platforms" in c["targeting"]):
-                    ad_targeting.device_platforms = c["targeting"]["device_platforms"]
+                    if ("facebook_positions" in c["targeting"]):
+                        ad_targeting.facebook_positions = c["targeting"]["facebook_positions"]
 
-                if ("instagram_positions" in c["targeting"]):    
-                    ad_targeting.instagram_positions = c["targeting"]["instagram_positions"]
-                
-                ad,create = Ads.objects.get_or_create(ad_id=c["id"])
-                ad.name = c["name"]
-                ad.adset_id = c["adset_id"]
-                ad.campaign_id = c["campaign_id"]
-                ad.account_id = c["account_id"]
-                if ("created_time" in c ):
-                    ad.created_time = c["created_time"]
-                if ("updated_time" in c ):
-                    ad.updated_time = c["updated_time"]
-                ad.status = c["status"]
-                ad_targeting.save()
-                ad.targeting = ad_targeting
-                ad.save()
+                    if ("device_platforms" in c["targeting"]):
+                        ad_targeting.device_platforms = c["targeting"]["device_platforms"]
 
-        for c in campaigns:
-            campaign = Campaign.objects.filter(campaign_id=c["id"])
-            if campaign.exists():
-                pass
-            else:
-                campaign = Campaign.objects.create(campaign_id = c["id"])
-                campaign.name = c["name"]
-                campaign.account_id = c["account_id"]
-                campaign.objective = c["objective"]
-                if ("start_time" in c ):
-                    campaign.start_time = c["start_time"]
-                campaign.status = c["status"]
-                if ("stop_time" in c ):
-                    campaign.stop_time = c["stop_time"]
-                if ("updated_time" in c ):
-                    campaign.updated_time = c["updated_time"]
-                if ('lifetime_budget' in c):
-                    campaign.lifetime_budget = c["lifetime_budget"]
+                    if ("instagram_positions" in c["targeting"]):
+                        ad_targeting.instagram_positions = c["targeting"]["instagram_positions"]
 
-                ads = Ads.objects.filter(campaign_id=c["id"])
-                for ad in ads:
-                    campaign.ads.add(ad)
-                campaign.save()
-               
-        #-----------------------------------------------Saving Campaign------------------------------------------------# 
-        print("saving campaigns into adaccount")
-        campaigns = Campaign.objects.filter(account_id=adActId)
-        for campaign in campaigns:
-            adaccount.campaigns.add(campaign)
-            adaccount.save()
+                    ad,create = Ads.objects.get_or_create(ad_id=c["id"])
+                    ad.name = c["name"]
+                    ad.adset_id = c["adset_id"]
+                    ad.campaign_id = c["campaign_id"]
+                    ad.account_id = c["account_id"]
+                    if ("created_time" in c ):
+                        ad.created_time = c["created_time"]
+                    if ("updated_time" in c ):
+                        ad.updated_time = c["updated_time"]
+                    ad.status = c["status"]
+                    ad_targeting.save()
+                    ad.targeting = ad_targeting
+                    ad.save()
 
+            for c in campaigns:
+                campaign = Campaign.objects.filter(campaign_id=c["id"])
+                if campaign.exists():
+                    pass
+                else:
+                    campaign = Campaign.objects.create(campaign_id = c["id"])
+                    campaign.name = c["name"]
+                    campaign.account_id = c["account_id"]
+                    campaign.objective = c["objective"]
+                    if ("start_time" in c ):
+                        campaign.start_time = c["start_time"]
+                    campaign.status = c["status"]
+                    if ("stop_time" in c ):
+                        campaign.stop_time = c["stop_time"]
+                    if ("updated_time" in c ):
+                        campaign.updated_time = c["updated_time"]
+                    if ('lifetime_budget' in c):
+                        campaign.lifetime_budget = c["lifetime_budget"]
+
+                    ads = Ads.objects.filter(campaign_id=c["id"])
+                    for ad in ads:
+                        campaign.ads.add(ad)
+                    campaign.save()
+
+            #-----------------------------------------------Saving Campaign------------------------------------------------#
+            print("saving campaigns into adaccount")
+            campaigns = Campaign.objects.filter(account_id=adActId)
+            for campaign in campaigns:
+                adaccount.campaigns.add(campaign)
+                adaccount.save()
+        except :
+            pass
         return redirect("facebook_auth:synchronous")
 
 
@@ -692,9 +825,9 @@ def campaign_detail(request):
     else:
         for accnt in Ad_Account.objects.all():
             adaccounts.append(accnt)
-    ads = []        
-    for adaccount in adaccounts:  
-        print(adaccount.name)  
+    ads = []
+    for adaccount in adaccounts:
+        print(adaccount.name)
         last_date = str(adaccount.last_update)
         campaigns = Campaign.objects.filter(account_id=adaccount.id)
         for campaign in campaigns :
@@ -773,7 +906,7 @@ def campaign_detail(request):
                     cost_per_action_type.value = action ["value"]
                     cost_per_action_type.save()
                     ad_insight.cost_per_action_type.add(cost_per_action_type)
-            
+
             if ("cost_per_thruplay" in element):
                 for action in element["cost_per_thruplay"] :
                     cost_per_thruplay,created = Cost_Per_Thruplay.objects.get_or_create(cost_per_thruplay_id = (ad.ad_id+"/"+action["action_type"]+"/"+action ["value"]))
@@ -813,7 +946,7 @@ def verify_not_exist_befor(ad,tab):
         return True
     except :
         return True
-    
+
 
 
 def campaigns_experience(request):
@@ -861,7 +994,7 @@ def campaigns_experience(request):
         if (obj.citie in regions_table):
             pass
         else:
-            regions_table.append(obj.citie)  
+            regions_table.append(obj.citie)
         if (obj.objective in objectivs_table):
             pass
         else:
@@ -893,75 +1026,297 @@ def campaigns_experience(request):
     if request.method == 'POST':
         form = Experience_Campain(request.POST)
         if (form.is_valid()):
-            objective = request.POST['Objective']
-            niche = request.POST['Domain']
-            genders = request.POST['Gender']
-            method_filter = request.POST['filter']
-            # citie = request.POST['Places']
-            # country = request.POST['Country']
-            # device_platforms = request.POST['Devices']
-            # publisher_platforms = request.POST['platforms']
-            # positions = request.POST['Positions']
-            qs = Experience_Campaign.objects.filter(objective=objective,niche=niche,genders = genders).order_by('efficiency').reverse()#,niche=niche,genders=genders,citie=citie)    
-            #device_platforms=device_platforms,publisher_platforms=publisher_platforms,positions=positions)
-            campaigns = qs[:8]
-            if (len(qs)>1):
-                data = True
-                tb = []
-                print("raouf")
-                print(method_filter)
-                for camp in qs:
-                    tb_compare = []
-                    count = 0
-                    if (verify_not_exist_befor(camp,tb)):
-                        for ad in qs:
-                            if (compare_campaign(camp,ad)):
-                                count = count + 1
-                                tb_compare.append((ad,count))
-                        tb.append(tb_compare)
+            fields_not_choiced = []
+            qs = Experience_Campaign.objects.all().order_by('efficiency').reverse()
+            try:
+                objective = request.POST['Objective']
+                qs = qs.filter(objective=objective)
+            except :
+                objective = ''
+                fields_not_choiced.append("objective")
+            try:
+                niche = request.POST['Domain']
+                qs = qs.filter(niche=niche)
+            except :
+                niche = ''
+                fields_not_choiced.append("niche")
+            try:
+                genders = request.POST['Gender']
+                qs = qs.filter(genders=genders)
+            except :
+                genders = ''
+                fields_not_choiced.append("genders")
+            try:
+                citie = request.POST['Places']
+                qs = qs.filter(citie=citie)
+            except :
+                citie = ''
+                fields_not_choiced.append("citie")
+            try:
+                country = request.POST['Country']
+                qs = qs.filter(country=country)
+            except :
+                country = ''
+                fields_not_choiced.append("country")
 
-                result = []
-                for obj in tb:
-                    cpc = 0
-                    cpp = 0
-                    cpm = 0
-                    ctr = 0
-                    efficiency = 0
-                    for ad,count in obj:
-                        cpc = cpc + float(ad.cpc)
-                        cpp = cpp + float(ad.cpp)
-                        cpm = cpm + float(ad.cpm)
-                        ctr = ctr + float(ad.ctr)
-                        efficiency = efficiency + ad.efficiency
-                    cpc = cpc/len(obj)
-                    cpp = cpp/len(obj)
-                    cpm = cpm/len(obj)
-                    ctr = ctr/len(obj)
-                    efficiency = efficiency/len(obj)
-                    for ob,count in obj:
-                        ads = ob
-                        counts = count
-                    result.append((ads,cpc,cpp,cpm,ctr,efficiency,counts))
-                
-                
-                # qs1 = Experience_Campaign.objects.filter(region=objective)
-                # qs3 = Experience_Campaign.objects.filter(region=niche)
-                # qs4 = Experience_Campaign.objects.filter(region=places)
-                # qs5 = Experience_Campaign.objects.filter(region=genders)
-                # qs6 = Experience_Campaign.objects.filter(region=device_platforms)
-                # qs7 = Experience_Campaign.objects.filter(region=publisher_platforms)
-                # qs8 = Experience_Campaign.objects.filter(region=positions)
-                return render(request,"campaign_experience.html",locals())
+            try:
+                device_platforms = request.POST['Devices']
+                qs = qs.filter(device_platforms=device_platforms)
+            except :
+                device_platforms = ''
+                fields_not_choiced.append("device_platforms")
+
+            try:
+                publisher_platforms = request.POST['platforms']
+                qs = qs.filter(publisher_platforms=publisher_platforms)
+            except :
+                publisher_platforms = ''
+                fields_not_choiced.append("publisher_platforms")
+
+            try:
+                positions = request.POST['Positions']
+                qs = qs.filter(positions=positions)
+            except :
+                positions = ''
+                fields_not_choiced.append("positions")
+
+            method_filter = request.POST['filter']
+
+            #device_platforms=device_platforms,publisher_platforms=publisher_platforms,positions=positions)
+            campaigns = True
+            if (positions != '' or publisher_platforms != '' or device_platforms != '' or country != '' or citie != '' or genders != '' or niche != '' or objective != ''):
+                if (len(qs)>=1):
+                    data = True
+                    tb = []
+                    # print(method_filter)
+                    for camp in qs:
+                        tb_compare = []
+                        count = 0
+                        if (verify_not_exist_befor(camp,tb)):
+                            for ad in qs:
+                                if (compare_campaign(camp,ad)):
+                                    count = count + 1
+                                    tb_compare.append((ad,count))
+                            tb.append(tb_compare)
+
+                    result = []
+                    for obj in tb:
+                        cpc = 0
+                        cpp = 0
+                        cpm = 0
+                        ctr = 0
+                        efficiency = 0
+                        for ad,count in obj:
+                            cpc = cpc + float(ad.cpc)
+                            cpp = cpp + float(ad.cpp)
+                            cpm = cpm + float(ad.cpm)
+                            ctr = ctr + float(ad.ctr)
+                            efficiency = efficiency + ad.efficiency
+                        cpc = cpc/len(obj)
+                        cpp = cpp/len(obj)
+                        cpm = cpm/len(obj)
+                        ctr = ctr/len(obj)
+                        efficiency = efficiency/len(obj)
+                        for ob,count in obj:
+                            ads = ob
+                            counts = count
+                        result.append((ads,cpc,cpp,cpm,ctr,efficiency,counts))
+                    print("r3ad")
+                    print(len(fields_not_choiced))
+                    obj_tab = []
+                    nich_tab = []
+                    gend_tab = []
+                    cit_tab = []
+                    coun_tab = []
+                    publ_tab = []
+                    dev_tab = []
+                    pos_tab = []
+                    for field in fields_not_choiced:
+                        if field == "objective":
+                            obj_tab = objectivs_table
+                        if field == "niche":
+                            nich_tab = domains_table
+                        if field == "genders":
+                            gend_tab = genders_table
+                        if field == "citie":
+                            cit_tab = regions_table
+                        if field == "country":
+                            coun_tab = country_table
+                        if field == "publisher_platforms":
+                            publ_tab = publisher_platforms_table
+                        if field == "device_platforms":
+                            dev_tab = devices_table
+                        if field == "positions":
+                            pos_tab = positions_table
+                            print(len(pos_tab))
+
+                    regions_table2 = []
+                    objectivs_table2 = []
+                    domains_table2 = []
+                    devices_table2 = []
+                    genders_table2 = []
+                    publisher_platforms_table2 = []
+                    positions_table2 = []
+                    country_table2 = []
+
+                    regions_table3 = []
+                    objectivs_table3 = []
+                    domains_table3 = []
+                    devices_table3 = []
+                    genders_table3 = []
+                    publisher_platforms_table3 = []
+                    positions_table3 = []
+                    country_table3 = []
+
+                    if (len(obj_tab)>0):
+                        for obj in obj_tab:
+                            for ads,cpc,cpp,cpm,ctr,efficiency,counts in result:
+                                if obj == ads.objective:
+                                    objectivs_table2.append((obj,efficiency))
+
+                        for obj in obj_tab:
+                            efficie=0
+                            enter = False
+                            for obj1,efficiency in objectivs_table2:
+                                if obj1==obj:
+                                    efficie=(efficiency+efficie)/2
+                                    enter = True
+                            if(enter):
+                                objectivs_table3.append((obj,efficie))
+
+                    if (len(nich_tab)>0):
+                        for obj in nich_tab:
+                            for ads,cpc,cpp,cpm,ctr,efficiency,counts in result:
+                                if obj == ads.niche:
+                                    domains_table2.append((obj,efficiency))
+                        for obj in nich_tab:
+                            efficie=0
+                            enter = False
+                            for obj1,efficiency in domains_table2:
+                                if obj1==obj:
+                                    efficie=(efficiency+efficie)/2
+                                    enter = True
+                            if(enter):
+                                domains_table3.append((obj,efficie))
+
+
+                    if (len(gend_tab)>0):
+                        for obj in gend_tab:
+                            for ads,cpc,cpp,cpm,ctr,efficiency,counts in result:
+                                if obj == ads.genders:
+                                    genders_table2.append((obj,efficiency))
+                        for obj in gend_tab:
+                            efficie=0
+                            enter = False
+                            for obj1,efficiency in genders_table2:
+                                if obj1==obj:
+                                    efficie=(efficiency+efficie)/2
+                                    enter = True
+                            if(enter):
+                                genders_table3.append((obj,efficie))
+
+
+                    if (len(cit_tab)>0):
+                        for obj in cit_tab:
+                            for ads,cpc,cpp,cpm,ctr,efficiency,counts in result:
+                                if obj == ads.citie:
+                                    regions_table2.append((obj,efficiency))
+                        for obj in cit_tab:
+                            efficie=0
+                            enter = False
+                            for obj1,efficiency in regions_table2:
+                                if obj1==obj:
+                                    efficie=(efficiency+efficie)/2
+                                    enter = True
+                            if(enter):
+                                regions_table3.append((obj,efficie))
+
+
+                    if (len(coun_tab)>0):
+                        for obj in coun_tab:
+                            for ads,cpc,cpp,cpm,ctr,efficiency,counts in result:
+                                if obj == ads.country:
+                                    country_table2.append((obj,efficiency))
+                        for obj in coun_tab:
+                            efficie=0
+                            enter = False
+                            for obj1,efficiency in country_table2:
+                                if obj1==obj:
+                                    efficie=(efficiency+efficie)/2
+                                    enter = True
+                            if(enter):
+                                country_table3.append((obj,efficie))
+
+
+                    if (len(publ_tab)>0):
+                        for obj in publ_tab:
+                            for ads,cpc,cpp,cpm,ctr,efficiency,counts in result:
+                                if obj == ads.publisher_platforms:
+                                    publisher_platforms_table2.append((obj,efficiency))
+                        for obj in publ_tab:
+                            efficie=0
+                            enter = False
+                            for obj1,efficiency in publisher_platforms_table2:
+                                if obj1==obj:
+                                    efficie=(efficiency+efficie)/2
+                                    enter = True
+                            if(enter):
+                                publisher_platforms_table3.append((obj,efficie))
+
+
+                    if (len(dev_tab)>0):
+                        for obj in dev_tab:
+                            for ads,cpc,cpp,cpm,ctr,efficiency,counts in result:
+                                if obj == ads.device_platforms:
+                                    devices_table2.append((obj,efficiency))
+                        for obj in dev_tab:
+                            efficie=0
+                            enter = False
+                            for obj1,efficiency in devices_table2:
+                                if obj1==obj:
+                                    efficie=(efficiency+efficie)/2
+                                    enter = True
+                            if(enter):
+                                devices_table3.append((obj,efficie))
+
+
+                    if (len(pos_tab)>0):
+                        for obj in pos_tab:
+                            for ads,cpc,cpp,cpm,ctr,efficiency,counts in result:
+                                if obj == ads.positions:
+                                    positions_table2.append((obj,efficiency))
+                        for obj in pos_tab:
+                            efficie=0
+                            enter = False
+                            for obj1,efficiency in positions_table2:
+                                if obj1==obj:
+                                    efficie=(efficiency+efficie)/2
+                                    enter = True
+                            if(enter):
+                                positions_table3.append((obj,efficie))
+
+                    regions_table3 = sorted(regions_table3, key=lambda item: item[1],reverse=True)
+                    objectivs_table3 = sorted(objectivs_table3, key=lambda item: item[1],reverse=True)
+                    domains_table3 = sorted(domains_table3, key=lambda item: item[1],reverse=True)
+                    devices_table3 = sorted(devices_table3, key=lambda item: item[1],reverse=True)
+                    genders_table3 = sorted(genders_table3, key=lambda item: item[1],reverse=True)
+                    publisher_platforms_table3 = sorted(publisher_platforms_table3, key=lambda item: item[1],reverse=True)
+                    positions_table3 = sorted(positions_table3, key=lambda item: item[1],reverse=True)
+                    country_table3 = sorted(country_table3, key=lambda item: item[1],reverse=True)
+
+                    return render(request,"campaign_experience.html",locals())
+                else:
+                    data = False
+                    return render(request,"campaign_experience.html",locals())
             else:
-                data = False
+                empty = True
                 return render(request,"campaign_experience.html",locals())
     return render(request,"campaign_experience.html",locals())
-
 
 class Campaign_Ads_Insights(APIView):
     authentication_classes = []
     permission_classes = []
-    
+
     def get(self, request, *args, **kwargs):
         ad_Id = kwargs["ad_Id"]
         ad = Ads.objects.filter(ad_id=ad_Id)[0]
@@ -994,8 +1349,8 @@ class Campaign_Ads_Insights(APIView):
         insight_engagement_rate_ranking = []
         insight_conversion_rate_ranking = []
         insight_dates = []
-        
-        for insight in insights: 
+
+        for insight in insights:
             insight_cpc.append(insight.cpc)
             insight_cpm.append(insight.cpm)
             insight_ctr.append(insight.ctr)
@@ -1046,10 +1401,10 @@ class Page_Fans(APIView):
         insight_date = []
         insight_value = []
         values = insights.values.all()
-        for value in values: 
+        for value in values:
             insight_value.append(value.value)
             end_time = ''
-            for i in range(0,10):                        #get the first part of the string date ex: yyyy/mm/dd 
+            for i in range(0,10):                        #get the first part of the string date ex: yyyy/mm/dd
                 end_time = end_time + value.end_time[i]  #
             insight_date.append(end_time)
         page_fans_context.update({
@@ -1079,10 +1434,10 @@ class Page_Metric_Choice(APIView): #view donne les statistique d'une metric choi
         insight_date = []
         insight_value = []
         values = insights.values.all()
-        for value in values: 
+        for value in values:
             insight_value.append(value.value)
             end_time = ''
-            for i in range(0,10):                        #get the first part of the string date ex: yyyy/mm/dd 
+            for i in range(0,10):                        #get the first part of the string date ex: yyyy/mm/dd
                 end_time = end_time + value.end_time[i]  #
             insight_date.append(end_time)
         context.update({
@@ -1119,24 +1474,24 @@ class Page_View_Logged_Logout(APIView):
         insight_date = []
         insight_value = []
         values = insight_logged_in.values.all()
-        for value in values: 
+        for value in values:
             insight_value.append(value.value)
             end_time = ''
-            for i in range(0,10):                        #get the first part of the string date ex: yyyy/mm/dd 
+            for i in range(0,10):                        #get the first part of the string date ex: yyyy/mm/dd
                 end_time = end_time + value.end_time[i]  #
             insight_date.append(end_time)
         page_view_logged_context.update({
             "insight_value":insight_value,
             "insight_date":insight_date,
         })
-        
+
         insight_date_b = []
         insight_value_b = []
         values_b = insight_logout.values.all()
-        for value in values_b: 
+        for value in values_b:
             insight_value_b.append(value.value)
             end_time = ''
-            for i in range(0,10):                        #get the first part of the string date ex: yyyy/mm/dd 
+            for i in range(0,10):                        #get the first part of the string date ex: yyyy/mm/dd
                 end_time = end_time + value.end_time[i]  #
             insight_date_b.append(end_time)
         page_view_logout_context.update({
@@ -1160,7 +1515,7 @@ class Page_Impressions(APIView):
         pageId = kwargs["pageId"]
         page = Account_Page.objects.filter(page_id=pageId)[0]
         qs = page.insights.all()
-        
+
 
         page_impressions_context = {
             "labels":"",
@@ -1189,7 +1544,7 @@ class Page_Impressions(APIView):
                 insight_date = []
                 insight_value = []
                 values = insight.values.all()
-                for value in values: 
+                for value in values:
                     insight_value.append(value.value)
                     end_time = ''
                     for i in range(0,10):
@@ -1218,7 +1573,7 @@ class Page_Impressions(APIView):
                         "labels":insight.name,
                         "insight_value":insight_value,
                         "insight_date":insight_date,
-                    })    
+                    })
         result = {
         "page_impressions_paid":page_impressions_paid_context,
         "page_impressions_organic":page_impressions_organic_context,
@@ -1252,7 +1607,7 @@ class Page_Posts_Impressions(APIView):
                 insight_date = []
                 insight_value = []
                 values = insight.values.all()
-                for value in values: 
+                for value in values:
                     insight_value.append(value.value)
                     end_time = ''
                     for i in range(0,10):
@@ -1293,7 +1648,7 @@ class Page_Fans_City(APIView):
         insight_date = []
         insight_value = []
         values = insights.values.all()
-        for value in values: 
+        for value in values:
             insight_value.append(value.value)
             end_time = ''
             for i in range(0,10):
@@ -1323,7 +1678,7 @@ class Page_Negative_Feedback(APIView):
         insight_date = []
         insight_value = []
         values = insights.values.all()
-        for value in values: 
+        for value in values:
             insight_value.append(value.value)
             end_time = ''
             for i in range(0,10):
@@ -1369,7 +1724,7 @@ def dashbaord_page(request):
             qs = Metric.objects.filter(API=api[0])
             metrics = []
             for metric in qs:
-                if (metric.queryName != "page_negative_feedback" and metric.queryName != "page_fans" and metric.queryName != "page_impressions_paid" and metric.queryName != "page_impressions_organic" and metric.queryName != "page_posts_impressions_paid" and metric.queryName != "page_posts_impressions_organic" and metric.queryName != "	page_fans_city" and metric.queryName != "page_views_logout" and metric.queryName != "page_views_logged_in_total" and metric.queryName != "page_fans_gender_age" and metric.queryName != "	page_fans_online" and metric.queryName != "page_fans_online_per_day" and metric.queryName != "page_fan_adds_by_paid_non_paid_unique" and metric.queryName != "page_fans_locale" and metric.queryName != "page_fans_country" and metric.queryName != "page_actions_post_reactions_anger_total" and metric.queryName != "page_actions_post_reactions_sorry_total" and metric.queryName != "page_actions_post_reactions_haha_total" and metric.queryName != "page_actions_post_reactions_wow_total" and metric.queryName != "page_actions_post_reactions_like_total" and metric.queryName != "page_actions_post_reactions_love_total "):
+                if (metric.queryName != "page_negative_feedback" and metric.queryName != "page_fans" and metric.queryName != "page_impressions_paid" and metric.queryName != "page_impressions_organic" and metric.queryName != "page_posts_impressions_paid" and metric.queryName != "page_posts_impressions_organic" and metric.queryName != "page_fans_city" and metric.queryName != "page_views_logout" and metric.queryName != "page_views_logged_in_total" and metric.queryName != "page_fans_gender_age" and metric.queryName != "	page_fans_online" and metric.queryName != "page_fans_online_per_day" and metric.queryName != "page_fan_adds_by_paid_non_paid_unique" and metric.queryName != "page_fans_locale" and metric.queryName != "page_fans_country" and metric.queryName != "page_actions_post_reactions_anger_total" and metric.queryName != "page_actions_post_reactions_sorry_total" and metric.queryName != "page_actions_post_reactions_haha_total" and metric.queryName != "page_actions_post_reactions_wow_total" and metric.queryName != "page_actions_post_reactions_like_total" and metric.queryName != "page_actions_post_reactions_love_total "):
                     metrics.append(metric)
             context = {
                 'page_objects' : page,
@@ -1384,9 +1739,9 @@ def dashbaord_page(request):
             return redirect("/")
     else:
         return redirect("facebook_auth:home")
-   
 
-    
+
+
 @login_required
 def dashbaord_adaccount(request):
     adActId = request.GET.get('adActId', '')
@@ -1465,7 +1820,7 @@ def dashbaord_adaccount(request):
             #                 cost_per_action_type.value = action ["value"]
             #                 cost_per_action_type.save()
             #                 ad_insight.cost_per_action_type.add(cost_per_action_type)
-                    
+
             #         if ("cost_per_thruplay" in element):
             #             for action in element["cost_per_thruplay"] :
             #                 cost_per_thruplay,created = Cost_Per_Thruplay.objects.get_or_create(cost_per_thruplay_id = (ad.ad_id+"/"+action["action_type"]+"/"+action ["value"]))
@@ -1512,11 +1867,11 @@ def synchronous_data(request):
                 'utilisateur' : userprofile,
             }
     return render(request,'synchronous_data.html', context)
-    
 
 
 
-    
+
+
 
 @login_required
 def dashbaord_V3(request):

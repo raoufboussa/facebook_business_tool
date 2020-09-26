@@ -1,5 +1,6 @@
 {% extends "account/base.html" %}
 {% load static %} 
+{% block head_title %}3S Solution|Edit Profile{% endblock %}
 {% block styles %}
     <link href="https://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css" rel="stylesheet"/>
     <style>
@@ -18,7 +19,8 @@
                 {% csrf_token %}
                 {{ user_form.as_p }}
                 {{ profile_form.as_p }}
-                <button type="submit">Save changes</button>
+                        <button class="btn btn-primary" type="submit">Save changes</button>
+                        <a href="{% url 'facebook_auth:home' %}" class="btn btn-danger float-right" type="button">Cancel</a>
                 </form>
             </div>
         </div>

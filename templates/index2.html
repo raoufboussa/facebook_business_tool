@@ -124,7 +124,7 @@
                         {% if adaccount_objects.insights.cost_per_thruplay.all %}
                        <h6>Cost per thruplay:</h6>
                         <ul class="list-group">
-                          {% for element in adaccount_objects.insights.cost_per_thruplay.all%}
+                          {% for element in adaccount_objects.insights.outbound_clicks_ctr.all%}
                             <li class="list-group-item">{{element.action_type}} : {{element.value}} €</li>
                           {% endfor %}
                         </ul>
@@ -258,6 +258,7 @@
 </div>
 {% block javascript %}
 <!-- AdminLTE App -->
+<script src="http://cdn.jsdelivr.net/jquery.flot/0.8.3/jquery.flot.min.js"></script>
 <script src={% static 'plugins/datatables/jquery.dataTables.js' %}></script>
 <script src={% static 'plugins/datatables-bs4/js/dataTables.bootstrap4.js' %}></script>
 <script src={% static 'dist/js/pages/dashboard2.js' %}></script>

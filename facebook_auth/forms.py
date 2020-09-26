@@ -55,4 +55,3 @@ class Edit_Profile(forms.ModelForm):
             'location': forms.TextInput(attrs={'class': 'form-control','placeholder':'Lacation','type':'text'}),
             'mobile_number': forms.TextInput(attrs={'class': 'form-control','placeholder':'Mobil Number','type':'text'}),
         }
-    

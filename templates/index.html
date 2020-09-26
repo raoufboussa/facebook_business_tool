@@ -54,12 +54,12 @@
                         <li class="list-group-item"> Page Category: <br> 
                           <p class="card-text">{{page_objects.category}}</p>
                         </li>
-                        <li class="list-group-item"> Offer eligible: <br> 
+                        {% comment %} <li class="list-group-item"> Offer eligible: <br> 
                           <p class="card-text">{{page_objects.offer_eligible}}</p>
-                        </li>
-                        <li class="list-group-item"> Supports instant articles: <br> 
+                        </li> {% endcomment %}
+                        {% comment %} <li class="list-group-item"> Supports instant articles: <br> 
                           <p class="card-text">{{page_objects.supports_instant_articles}}</p>
-                        </li>
+                        </li> {% endcomment %}
                         <li class="list-group-item"> Verification status: <br> 
                           <p class="card-text">{{page_objects.verification_status}}</p>
                         </li>
@@ -256,7 +256,7 @@
                 <div class="card">
                   <div class="card-header bg-info">
                     <h3 class="card-title">
-                      <i class="fas fa-chart-pie mr-1"></i>
+                      <i class="fas fa-chart-line"></i>
                       Fan de la page par wilaya
                     </h3>
                    
@@ -299,7 +299,7 @@
                 <div class="card bg-gradient-info">
                   <div class="card-header border-0 bg-info">
                     <h3 class="card-title">
-                      <i class="fas fa-th mr-1"></i>
+                      <i class="fas fa-chart-line"></i>
                       Page Fans
                     </h3>
                     <div class="card-tools">
@@ -334,7 +334,7 @@
                 <!-- AREA CHART -->
                 <div class="card card-primary">
                   <div class="card-header bg-info">
-                    <h3 class="card-title">Daily Logged-in vs Logout Views Count Per Page</h3>
+                    <h3 class="card-title"><i class="fas fa-chart-line"></i> Daily Logged-in and Logout Views Count Per Page</h3>
                     <div class="card-tools">
                       <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-minus"></i>
                       </button>
@@ -371,7 +371,7 @@
                 <!-- Line chart -->
                 <div class="card">
                     <div class="card-header bg-info">
-                      <h3 class="card-title">Impressions and Post Impressions</h3>
+                      <h3 class="card-title"><i class="fas fa-chart-line"></i> Impressions and Post Impressions</h3>
                       <div class="card-tools">
                         <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-minus"></i>
                         </button>
@@ -399,11 +399,11 @@
 
                       <div class="d-flex flex-row justify-content-end">
                         <span class="mr-2">
-                          <i class="fas fa-square text-primary"></i> impressions
+                          <i class="fas fa-square text-primary"></i>post_impressions
                         </span>
 
                         <span>
-                          <i class="fas fa-square text-gray"></i> post_impressions
+                          <i class="fas fa-square text-gray"></i> impressions
                         </span>
                       </div>
                     </div>
@@ -454,7 +454,7 @@
                  <!-- LINE CHART -->
                 <div class="card card-info">
                   <div class="card-header bg-info">
-                    <h3 class="card-title">Daily Organic vs Paid impressions of your posts </h3>
+                    <h3 class="card-title"><i class="fas fa-chart-line"></i> Daily Organic and Paid impressions of your posts </h3>
 
                     <div class="card-tools">
                       <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-minus"></i>
@@ -478,6 +478,15 @@
                     <div class="chart">
                       <canvas id="lineChart-1" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas>
                     </div>
+                    <div class="d-flex flex-row justify-content-end">
+                        <span class="mr-2">
+                          <i class="fas fa-square text-primary"></i> organic impressions
+                        </span>
+
+                        <span>
+                          <i class="fas fa-square text-gray"></i> paid impressions
+                        </span>
+                      </div>
                   </div>
                   <!-- /.card-body -->
                   <div class="card-footer">
@@ -495,7 +504,7 @@
                 <div class = "col-lg-12">
                     <div class="card">
                       <div class="card-header bg-info">
-                        <h3 class="card-title">Daily Organic vs Paid impressions  </h3>
+                        <h3 class="card-title"><i class="far fa-chart-bar"></i> Daily Organic and Paid impressions  </h3>
 
                         <div class="card-tools">
                           <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-minus"></i>

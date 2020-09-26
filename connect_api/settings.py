@@ -46,6 +46,10 @@ INSTALLED_APPS = [
     'allauth.socialaccount',
     'allauth.socialaccount.providers.facebook',
     'allauth.socialaccount.providers.google',
+    'allauth.socialaccount.providers.instagram',
+    'allauth.socialaccount.providers.linkedin',
+    'allauth.socialaccount.providers.linkedin_oauth2',
+    'allauth.socialaccount.providers.twitter',
 
 ]
 
@@ -153,15 +157,11 @@ AUTHENTICATION_BACKENDS = (
 
 )
 
-SOCIALACCOUNT_QUERY_EMAIL = True    
+# SOCIALACCOUNT_QUERY_EMAIL = True    
 
-ACCOUNT_AUTHENTICATION_METHOD = 'username_email'
-ACCOUNT_USERNAME_REQUIRED = False
-ACCOUNT_CONFIRM_EMAIL_ON_GET = True
-
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
-
-ACCOUNT_EMAIL_VERIFICATION = "mandatory"
+# ACCOUNT_AUTHENTICATION_METHOD = 'username_email'
+# ACCOUNT_USERNAME_REQUIRED = False
+# ACCOUNT_CONFIRM_EMAIL_ON_GET = True
 
 SOCIAL_AUTH_FACEBOOK_KEY = '3230373573704000'  # App ID
 SOCIAL_AUTH_FACEBOOK_SECRET ='0e51c739872e518f388fbf1439b6d7e7' #app key
@@ -179,11 +179,14 @@ SOCIAL_AUTH_FACEBOOK_SECRET ='0e51c739872e518f388fbf1439b6d7e7' #app key
 ACCOUNT_EMAIL_REQUIRED=True
 ACCOUNT_USERNAME_REQURIED=True
 
+ACCOUNT_EMAIL_VERIFICATION = "mandatory"
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
 EMAIL_USE_TLS = True
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_HOST_USER = DEFAULT_FROM_EMAIL = 'rboussa16@gmail.com'
-SERVER_EMAIL = 'rboussa16@gmail.com'
+# SERVER_EMAIL = 'rboussa16@gmail.com'
 EMAIL_HOST_PASSWORD = 'LAKAMOURAbisou1995'
 
 
@@ -223,7 +226,7 @@ DATA_UPLOAD_MAX_NUMBER_FIELDS = 10240
 TIMEOUT = None
 ACCOUNT_LOGOUT_REDIRECT_URL ="/"
 SIGNUP_REDIRECT_URL = '/account_login'
-LOGIN_REDIRECT_URL = '/home'
+LOGIN_REDIRECT_URL = '/'
 LOGIN_URL = "/accounts/login"
 
 SITE_ID = 1

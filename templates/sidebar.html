@@ -73,7 +73,7 @@
               </li>
               {% endif %}
               <li class="nav-item has-treeview menu-open">
-              <a href="/prepareReport" class="nav-link {% if "/prepareReport" == request.path %} active{% endif %}">
+              <a href="{% url 'facebook_auth:report' %}" class="nav-link {% if "/home/report" == request.path %} active{% endif %}">
                 <i class="fas fa-file"></i>
                 <p>Get report for Client</p>
               </a>

@@ -10,7 +10,7 @@
                 <div class="card">
                   <div class="card-header bg-info">
                     <h3 class="card-title">
-                      Export Data to file
+                      Export Data to csv file
                     </h3>
                    
                   </div><!-- /.card-header -->
@@ -19,11 +19,11 @@
                         <div class="row">
                         <h6 class="login-box-msg">Choose witch model you want to export</h6>
                           <div class="col-12">
-                            <form action="{% url 'facebook_auth:export' %}"  method="POST">
+                            <form action="{% url 'facebook_auth:export' %}" method="POST">
                                 {% csrf_token %}
                                 <div class="form-group">
                                     <label for="exampleFormControlInput1">Model</label>
-                                    <select autofocus="autofocus" type="text" class="form-control" name="model" id="mySelect" required="">
+                                    <select autofocus="autofocus" type="text" class="form-control" name="model_first" id="mySelect" required="">
                                         <option disabled selected value> -- select an option -- </option>
                                         <option>Campaigns</option>
                                         <option>Pages</option>
@@ -32,11 +32,47 @@
                                     </select>
                                 </div>
                                 <div class="row">
-                                    <div class="">
-                                        <button type="submit" class="btn btn-primary btn-block" >Export As File</button>
+                                    <div class="col-lg">
+                                        <button type="submit" value= "submit1" class="btn btn-primary" >Export CSV </button>
                                     </div>
                                 </div> 
-                            <form>    
+                            </form>    
+                          </div>
+                        </div>
+                    </div>
+                  </div><!-- /.card-body -->
+                </div>
+                <!-- /.card -->
+                <div class="card">
+                  <div class="card-header bg-info">
+                    <h3 class="card-title">
+                      Export Data to Excel file
+                    </h3>
+                   
+                  </div><!-- /.card-header -->
+                  <div class="card-body">
+                    <div class="form-group">
+                        <div class="row">
+                        <h6 class="login-box-msg">Choose witch model you want to export</h6>
+                          <div class="col-12">
+                            <form action="{% url 'facebook_auth:export_excel' %}"  method="POST">
+                                {% csrf_token %}
+                                <div class="form-group">
+                                    <label for="exampleFormControlInput1">Model</label>
+                                    <select autofocus="autofocus" type="text" class="form-control" name="model_second" id="mySelect" required="" >
+                                        <option disabled selected value> -- select an option -- </option>
+                                        <option>Campaigns</option>
+                                        <option>Pages</option>
+                                        <option>Ad_accounts</option>
+                                        <option>Users</option>
+                                    </select>
+                                </div>
+                                <div class="row">
+                                    <div class="col-lg">
+                                        <button type="submit" style="margin-right: 15px;" onClick="placeOrder()" value = "submit2" class="btn btn-primary" >Export Excel</button>
+                                    </div>
+                                </div> 
+                            </form>    
                           </div>
                         </div>
                     </div>

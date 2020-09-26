@@ -91,7 +91,7 @@ class Account_Page(models.Model):
 
 class Action(models.Model):
     action_id = models.CharField(max_length=100)
-    action_type = models.CharField(max_length=30)
+    action_type = models.CharField(max_length=100)
     value = models.CharField(max_length=100,blank=True, null=True)
 
     class Meta:
